@@ -355,6 +355,10 @@
     cursor:pointer;background:var(--surface);border:1px solid var(--line);color:var(--ink);
     padding:6px 11px;border-radius:999px}
   .opt:hover{border-color:var(--teal);color:var(--teal)}
+  .opt.tudo{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:700}
+  .opt.tudo:hover{color:#fff;opacity:.9}
+  .opt.tirar{border-style:dashed;color:var(--muted)}
+  .opt.tirar:hover{border-color:var(--coral);border-style:solid;color:var(--coral)}
   .opt small{font-family:var(--mono);font-size:.6rem;letter-spacing:.04em;color:var(--muted)}
   .rest-by{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;color:var(--muted);margin-top:8px;display:block}
   .del{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;
@@ -491,7 +495,7 @@
   <div class="wrap viewpad">
     <p class="eyebrow">15 dias</p>
     <h2 class="view-h">Cronograma</h2>
-    <p class="section-note">Toque no seu nome no dia que você vai. Ninguém precisa ir em tudo — a ideia é justamente cada um saber quem vai onde. Use o <strong>+ dia</strong> pra criar uma data fora da lista, e as programações pra combinar saída com horário. <strong>O horário de abertura e fechamento fica em branco até alguém conferir no app oficial do parque e preencher aqui</strong> — aí vale pra todo mundo.</p>
+    <p class="section-note">Toque no seu nome no dia que você vai. Ninguém precisa ir em tudo — a ideia é justamente cada um saber quem vai onde. Use o <strong>+ adicionar cronograma</strong> pra criar uma data fora da lista, e as programações pra combinar saída com horário. <strong>O horário de abertura e fechamento fica em branco até alguém conferir no app oficial do parque e preencher aqui</strong> — aí vale pra todo mundo.</p>
     <div id="agenda" class="agenda"></div>
   </div>
 </section>
@@ -1710,12 +1714,25 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     if(pickerAberto===chave){
       var pick=document.createElement('div'); pick.className='picker';
       var restam=PESSOAS.filter(function(p){ return ocupantes.indexOf(p.id)<0; });
-      if(!restam.length){ pick.innerHTML='<span class="empty">Todo mundo já está aqui.</span>'; }
+      if(restam.length>1){
+        var todos=document.createElement('button'); todos.type='button'; todos.className='opt tudo';
+        todos.textContent='Todos (+'+restam.length+')';
+        todos.addEventListener('click',function(){
+          onSalvar(PESSOAS.map(function(p){ return p.id; }));
+        });
+        pick.appendChild(todos);
+      }
+      if(ocupantes.length){
+        var limpa=document.createElement('button'); limpa.type='button'; limpa.className='opt tirar';
+        limpa.textContent='Tirar todos';
+        limpa.addEventListener('click',function(){ onSalvar([]); });
+        pick.appendChild(limpa);
+      }
+      if(!restam.length && !ocupantes.length){ pick.innerHTML='<span class="empty">Ninguém pra adicionar.</span>'; }
       restam.forEach(function(p){
         var o=document.createElement('button'); o.type='button'; o.className='opt';
         o.innerHTML=esc(p.nome)+(onde[p.id]?'<small>'+esc(onde[p.id])+'</small>':'');
         o.addEventListener('click',function(){
-          pickerAberto=null;
           onSalvar(ocupantes.concat([p.id]));
         });
         pick.appendChild(o);
