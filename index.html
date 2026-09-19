@@ -207,13 +207,22 @@
   }
   .side-link:hover{background:var(--surface-2);color:var(--ink)}
   .side-link[aria-current="true"]{background:var(--teal);color:#fff}
-  .side-foot{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:6px}
-  .side-foot label{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-  .side-foot select{
-    font-family:var(--body);font-size:.9rem;padding:8px 9px;border-radius:7px;
-    border:1px solid var(--line);background:var(--paper);color:var(--ink);width:100%;
+  .apptop{
+    position:fixed;top:0;left:212px;right:0;z-index:35;height:calc(54px + env(safe-area-inset-top, 0px));
+    padding:env(safe-area-inset-top, 0px) 18px 0;
+    background:var(--surface);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:12px;
   }
-  .viewport{margin-left:212px;min-height:100vh}
+  .apptop-brand{display:none;font-family:var(--display);font-weight:800;font-size:1.05rem;letter-spacing:-.02em}
+  .apptop-brand b{font-family:var(--mono);font-size:.6rem;font-weight:400;letter-spacing:.08em;
+    color:var(--muted);display:block;margin-top:1px}
+  .apptop-who{display:flex;align-items:center;gap:8px;margin-left:auto}
+  .apptop-who label{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .apptop-who select{font-family:var(--body);font-size:.88rem;padding:7px 10px;border-radius:8px;
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);max-width:11em}
+  .viewport{margin-left:212px;min-height:100vh;padding-top:calc(54px + env(safe-area-inset-top, 0px))}
+  .topbar{top:calc(54px + env(safe-area-inset-top, 0px))}
   .view{display:none}
   .view.on{display:block}
   .viewpad{padding-block:clamp(30px,5vw,58px)}
@@ -223,19 +232,19 @@
 
   @media (max-width:860px){
     .sidebar{
-      left:0;right:0;top:auto;bottom:0;width:auto;flex-direction:row;align-items:center;gap:10px;
+      left:0;right:0;top:auto;bottom:0;width:auto;flex-direction:row;align-items:stretch;gap:0;
       border-right:none;border-top:1px solid var(--line);
-      padding:8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+      padding:6px 8px calc(6px + env(safe-area-inset-bottom, 0px));
     }
     .side-brand{display:none}
-    .side-foot{border-top:none;padding-top:0;flex:none;max-width:38%}
-    .side-foot label{display:none}
-    .side-foot select{font-size:.8rem;padding:7px}
-    .side-nav{flex-direction:row;gap:4px;overflow-x:auto;scrollbar-width:none}
-    .side-nav::-webkit-scrollbar{display:none}
-    .side-link{white-space:nowrap;font-size:.85rem;padding:8px 12px}
-    .viewport{margin-left:0;padding-bottom:78px}
-    .topbar{top:0}
+    .side-nav{flex-direction:row;gap:2px;overflow:visible;width:100%}
+    .side-link{flex:1 1 0;min-width:0;text-align:center;font-size:.76rem;padding:9px 2px;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:9px}
+    .apptop{left:0;padding-inline:14px}
+    .apptop-brand{display:block;font-size:.98rem}
+    .apptop-who label{display:none}
+    .apptop-who select{font-size:.82rem;padding:6px 8px;max-width:9.5em}
+    .viewport{margin-left:0;padding-bottom:74px}
   }
 
   /* ---------- cronograma ---------- */
@@ -483,11 +492,15 @@
     <button type="button" class="side-link" data-view="restaurantes">Restaurantes</button>
     <button type="button" class="side-link" data-view="reuniao" id="linkReuniao" hidden>Reunião</button>
   </div>
-  <div class="side-foot">
-    <label for="whoAmI">Quem é você</label>
+</nav>
+
+<header class="apptop">
+  <span class="apptop-brand">Orlando <b>22 set – 6 out</b></span>
+  <div class="apptop-who">
+    <label for="whoAmI">Você é</label>
     <select id="whoAmI"><option value="">escolha seu nome</option></select>
   </div>
-</nav>
+</header>
 
 <div class="viewport">
 
@@ -505,7 +518,7 @@
     <p class="eyebrow">4 carros</p>
     <h2 class="view-h">Carros</h2>
     <p class="section-note">Quem está em cada carro e quantos lugares sobram. Dá pra ajustar a quantidade de lugares quando vocês virem os carros de verdade.</p>
-    <div id="carros" class="cards"></div>
+    <div id="listaCarros" class="cards"></div>
   </div>
 </section>
 
@@ -514,7 +527,7 @@
     <p class="eyebrow">7 quartos</p>
     <h2 class="view-h">Quartos</h2>
     <p class="section-note">Quem dorme onde e qual banheiro é de quem. Os quartos 4 e 5 dividem o mesmo banheiro (Jack e Jill) — combinem horário entre vocês. Dá pra trocar de quarto aqui mesmo. <strong>Quartos 1 e 2 no térreo; do 3 ao 7 no andar de cima.</strong></p>
-    <div id="quartos" class="cards"></div>
+    <div id="listaQuartos" class="cards"></div>
   </div>
 </section>
 
@@ -1744,7 +1757,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
 
   /* ---------- carros ---------- */
   function pintaCarros(){
-    var alvo=document.getElementById('carros'); if(!alvo) return;
+    var alvo=document.getElementById('listaCarros'); if(!alvo) return;
     if(digitando(alvo)) return;
     alvo.innerHTML='';
     var ondeC=mapaOnde('carros',CARROS);
@@ -1775,7 +1788,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
 
   /* ---------- quartos ---------- */
   function pintaQuartos(){
-    var alvo=document.getElementById('quartos'); if(!alvo) return;
+    var alvo=document.getElementById('listaQuartos'); if(!alvo) return;
     if(digitando(alvo)) return;
     alvo.innerHTML='';
     var ondeQ=mapaOnde('quartos',QUARTOS);
