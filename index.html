@@ -251,8 +251,8 @@
   .day-sub{color:var(--muted);font-size:.95em;margin:4px 0 0}
   .day-hours{display:flex;align-items:center;gap:7px;margin-top:8px}
   .day-hours span{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-  .day-hours input{font-family:var(--mono);font-size:.8rem;padding:5px 8px;border-radius:6px;
-    border:1px dashed var(--line);background:transparent;color:var(--ink);width:14em}
+  .day-hours input{font-family:var(--mono);font-size:.8rem;padding:5px 9px;border-radius:6px;
+    border:1px dashed var(--line);background:transparent;color:var(--ink);width:11em}
   .day-hours input:focus{border-style:solid;border-color:var(--teal)}
   .names{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
   .name{font-family:var(--body);font-size:.82rem;font-weight:500;cursor:pointer;
@@ -290,6 +290,40 @@
     border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
   .seats .free{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
   .seats .free.cheio{color:var(--coral)}
+  .crono-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 16px}
+  .crono-bar label{font-family:var(--mono);font-size:.62rem;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--muted)}
+  .crono-bar select{font-family:var(--body);font-size:.88rem;padding:7px 10px;border-radius:8px;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+  .day.extra{border-left:4px solid var(--coral)}
+  .day-top .count{margin:0;flex:none}
+  .day-sec{margin-top:14px;border-top:1px dashed var(--line);padding-top:11px}
+  .day-sec h4{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 8px;font-weight:400}
+  .day-sec .empty{margin:0;font-size:.9em}
+  .day-sec .chosen{margin-top:8px}
+  .prog{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;
+    padding:9px 0;border-bottom:1px dashed var(--line)}
+  .prog-h{font-family:var(--mono);font-size:.78rem;color:var(--coral);flex:none;
+    min-width:3.4em;padding-top:4px}
+  .prog-b{flex:1;min-width:200px}
+  .prog-t{font-family:var(--display);font-weight:700;font-size:1.02em;display:block}
+  .prog-t small{font-family:var(--mono);font-size:.58rem;font-weight:400;color:var(--muted);letter-spacing:.04em}
+  .prog-x{background:none;border:none;color:var(--muted);cursor:pointer;flex:none;
+    font-family:var(--mono);font-size:.6rem;letter-spacing:.07em;padding:5px 2px}
+  .prog-x:hover{color:var(--coral)}
+  .day-top .prog-x{margin-left:auto}
+  .miniform{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+  .miniform input{font-family:var(--body);font-size:.86rem;padding:7px 10px;border-radius:7px;
+    border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+  .miniform input.hora{width:5.5em;font-family:var(--mono);font-size:.82rem}
+  .miniform input.texto{flex:1;min-width:150px}
+  .miniform .nav-btn{padding:8px 16px;font-size:.86rem}
+  .addday{background:var(--surface);border:1px dashed var(--line);border-radius:11px;
+    padding:13px 15px;margin:0 0 14px}
+  .eu-vou{background:var(--coral);border:1px solid var(--coral);color:#fff;font-family:var(--body);
+    font-weight:700;font-size:.85rem;padding:6px 14px;border-radius:999px;cursor:pointer}
+  .eu-vou:hover{opacity:.9}
   .chosen{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
   .pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-size:.85rem;
     font-weight:500;cursor:pointer;background:var(--teal);border:1px solid var(--teal);color:#fff;
@@ -441,7 +475,7 @@
   <div class="wrap viewpad">
     <p class="eyebrow">15 dias</p>
     <h2 class="view-h">Cronograma</h2>
-    <p class="section-note">Toque no seu nome no dia que você vai. Ninguém precisa ir em tudo — a ideia é justamente cada um saber quem vai onde. Nos dias livres, jogue ideias.</p>
+    <p class="section-note">Toque no seu nome no dia que você vai. Ninguém precisa ir em tudo — a ideia é justamente cada um saber quem vai onde. Use o <strong>+ dia</strong> pra criar uma data fora da lista, e as programações pra combinar saída com horário. <strong>O horário de abertura e fechamento fica em branco até alguém conferir no app oficial do parque e preencher aqui</strong> — aí vale pra todo mundo.</p>
     <div id="agenda" class="agenda"></div>
   </div>
 </section>
@@ -1426,54 +1460,163 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
   }
 
   /* ---------- cronograma ---------- */
+  var filtro=null, formDia=false;
+  var SEMANA=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  function diaSemana(d){ return SEMANA[new Date(d+'T12:00:00').getDay()]; }
+  function dataCurta(d){
+    var t=new Date(d+'T12:00:00');
+    return diaSemana(d)+' · '+String(t.getDate()).padStart(2,'0')+'/'+String(t.getMonth()+1).padStart(2,'0');
+  }
+  function progs(d){
+    var p=dia(d).progs||{};
+    return Object.keys(p).map(function(k){ var o=p[k]||{}; o._k=k; return o; })
+      .sort(function(x,y){ return String(x.h||'~').localeCompare(String(y.h||'~')); });
+  }
+  function quemProg(pr){ var q=pr.quem||{}; return Object.keys(q).filter(function(k){return q[k];}); }
+  function diasTodos(){
+    var lista=AGENDA.map(function(a){ return {d:a.d,t:a.t,sub:a.sub,tipo:a.tipo,fixo:true}; });
+    var ex=remoto.extras||{};
+    Object.keys(ex).forEach(function(k){
+      var e=ex[k]||{};
+      if(!e.d) return;
+      lista.push({d:e.d,t:e.t||'Sem título',sub:e.sub||'',tipo:'extra',fixo:false,key:k});
+    });
+    lista.sort(function(x,y){ return x.d<y.d?-1:(x.d>y.d?1:0); });
+    return lista;
+  }
+  function apareceNoFiltro(a){
+    if(!filtro) return true;
+    if(participantes(a.d).indexOf(filtro)>-1) return true;
+    var achou=false;
+    progs(a.d).forEach(function(pr){ if(quemProg(pr).indexOf(filtro)>-1) achou=true; });
+    return achou;
+  }
+
   function pintaAgenda(){
     var alvo=document.getElementById('agenda'); if(!alvo) return;
     if(digitando(alvo)) return;
     alvo.innerHTML='';
-    AGENDA.forEach(function(a){
+
+    var barra=document.createElement('div'); barra.className='crono-bar';
+    var lab=document.createElement('label'); lab.setAttribute('for','filtroNome'); lab.textContent='Ver agenda de';
+    var sel=document.createElement('select'); sel.id='filtroNome';
+    var o0=document.createElement('option'); o0.value=''; o0.textContent='todo mundo'; sel.appendChild(o0);
+    PESSOAS.forEach(function(p){
+      var o=document.createElement('option'); o.value=p.id; o.textContent=p.nome;
+      if(filtro===p.id) o.selected=true; sel.appendChild(o);
+    });
+    sel.addEventListener('change',function(){ filtro=sel.value||null; pintaAgenda(); });
+    barra.appendChild(lab); barra.appendChild(sel);
+    var novoBtn=document.createElement('button'); novoBtn.type='button'; novoBtn.className='pill add';
+    novoBtn.textContent = formDia ? 'fechar' : '+ dia';
+    novoBtn.addEventListener('click',function(){ formDia=!formDia; pintaAgenda(); });
+    barra.appendChild(novoBtn);
+    alvo.appendChild(barra);
+
+    if(formDia){
+      var fd=document.createElement('form'); fd.className='addday miniform';
+      fd.innerHTML='<input type="date" required style="width:11em">'+
+        '<input type="text" class="texto" maxlength="60" placeholder="O que acontece nesse dia" required>'+
+        '<button class="nav-btn" type="submit">Criar dia</button>';
+      fd.addEventListener('submit',function(e){
+        e.preventDefault();
+        var d=fd.querySelector('input[type=date]').value, t=fd.querySelector('.texto').value.trim();
+        if(!d||!t) return;
+        formDia=false;
+        salvar('POST','/extras',{d:d,t:t,por:eu?nomeDe(eu):'',ts:Date.now()});
+      });
+      alvo.appendChild(fd);
+    }
+
+    var lista=diasTodos().filter(apareceNoFiltro);
+    if(filtro){
+      var res=document.createElement('p'); res.className='count';
+      res.textContent=lista.length+(lista.length===1?' dia com ':' dias com ')+nomeDe(filtro);
+      alvo.appendChild(res);
+    }
+    if(!lista.length){
+      var vz=document.createElement('p'); vz.className='empty';
+      vz.textContent='Nada marcado pra '+(filtro?nomeDe(filtro):'ninguém')+' ainda.';
+      alvo.appendChild(vz); return;
+    }
+
+    lista.forEach(function(a){
       var card=document.createElement('div'); card.className='day '+a.tipo;
-      var pt=new Date(a.d+'T12:00:00');
-      var dataTxt=a.dia+' · '+String(pt.getDate()).padStart(2,'0')+'/'+String(pt.getMonth()+1).padStart(2,'0');
       var ativos=participantes(a.d);
-      var h='<div class="day-top"><span class="day-date">'+dataTxt+'</span><span class="day-t">'+esc(a.t)+'</span></div>';
+      var h='<div class="day-top"><span class="day-date">'+dataCurta(a.d)+'</span>'+
+            '<span class="day-t">'+esc(a.t)+'</span>'+
+            '<span class="count">'+ativos.length+' de 15</span></div>';
       if(a.sub) h+='<p class="day-sub">'+esc(a.sub)+'</p>';
       if(a.tipo==='parque'){
-        h+='<div class="day-hours"><span>Abre e fecha</span><input type="text" maxlength="40" placeholder="preencha pelo app do parque" value="'+esc(dia(a.d).horario||'')+'" data-h="'+a.d+'"></div>';
+        h+='<div class="day-hours"><span>Abre e fecha</span><input type="text" maxlength="40" placeholder="ex.: 9h às 22h" value="'+esc(dia(a.d).horario||'')+'" data-h="'+a.d+'"></div>';
       }
       card.innerHTML=h;
-      card.appendChild(chips(ativos,function(id,ligar){
-        salvar(ligar?'PUT':'DELETE','/dias/'+a.d+'/participantes/'+id, ligar?true:undefined);
-      }));
-      var c=document.createElement('span'); c.className='count';
-      c.textContent=ativos.length+' de 15 marcados';
-      card.appendChild(c);
 
-      if(a.tipo==='livre'){
-        var ideias=dia(a.d).ideias||{};
-        var wrap=document.createElement('div'); wrap.className='ideas';
-        var ks=Object.keys(ideias);
-        if(!ks.length) wrap.innerHTML='<p class="idea empty">Nenhuma ideia ainda. Seja o primeiro.</p>';
-        ks.forEach(function(k){
-          var it=ideias[k];
-          var row=document.createElement('p'); row.className='idea';
-          row.innerHTML='<b>'+esc(it.t)+'</b><span>'+esc(it.por||'alguém')+'</span>';
-          var x=document.createElement('button'); x.type='button'; x.textContent='remover'; x.title='Remover ideia';
-          x.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.d+'/ideias/'+k); });
-          row.appendChild(x); wrap.appendChild(row);
-        });
-        var f=document.createElement('form'); f.className='addform';
-        f.innerHTML='<input type="text" maxlength="80" placeholder="Sua ideia pra esse dia" required><button class="nav-btn" type="submit">Jogar ideia</button>';
-        f.addEventListener('submit',function(e){
-          e.preventDefault();
-          var v=f.querySelector('input').value.trim(); if(!v) return;
-          f.querySelector('input').value='';
-          salvar('POST','/dias/'+a.d+'/ideias',{t:v,por:eu?nomeDe(eu):'',ts:Date.now()});
-        });
-        wrap.appendChild(f);
-        card.appendChild(wrap);
+      if(!a.fixo){
+        var rmD=document.createElement('button'); rmD.type='button'; rmD.className='prog-x'; rmD.textContent='apagar dia';
+        rmD.addEventListener('click',function(){ salvar('DELETE','/extras/'+a.key); });
+        card.querySelector('.day-top').appendChild(rmD);
       }
+
+      var s1=document.createElement('div'); s1.className='day-sec';
+      s1.innerHTML='<h4>Quem vai</h4>';
+      s1.appendChild(seletor('dia:'+a.d,ativos,{},function(novo){
+        var mapa={}; novo.forEach(function(id){ mapa[id]=true; });
+        salvar('PUT','/dias/'+a.d+'/participantes',mapa);
+      }));
+      if(eu && ativos.indexOf(eu)<0){
+        var euBtn=document.createElement('button'); euBtn.type='button'; euBtn.className='eu-vou';
+        euBtn.textContent='Eu vou';
+        euBtn.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/participantes/'+eu,true); });
+        s1.querySelector('.chosen').insertBefore(euBtn, s1.querySelector('.pill.add'));
+      }
+      card.appendChild(s1);
+
+      var s2=document.createElement('div'); s2.className='day-sec';
+      s2.innerHTML='<h4>'+(a.tipo==='livre'?'Ideias e programações':'Programações do dia')+'</h4>';
+      var ps=progs(a.d);
+      if(!ps.length){
+        var nd=document.createElement('p'); nd.className='empty'; nd.textContent='Nada combinado ainda.';
+        s2.appendChild(nd);
+      }
+      ps.forEach(function(pr){
+        var row=document.createElement('div'); row.className='prog';
+        var hh=document.createElement('span'); hh.className='prog-h'; hh.textContent=pr.h||'—';
+        var bd=document.createElement('div'); bd.className='prog-b';
+        bd.innerHTML='<span class="prog-t">'+esc(pr.t)+(pr.por?' <small>· '+esc(pr.por)+'</small>':'')+'</span>';
+        var qs=quemProg(pr);
+        bd.appendChild(seletor('prog:'+a.d+':'+pr._k,qs,{},function(novo){
+          var mapa={}; novo.forEach(function(id){ mapa[id]=true; });
+          salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem',mapa);
+        }));
+        if(eu && qs.indexOf(eu)<0){
+          var eb=document.createElement('button'); eb.type='button'; eb.className='eu-vou'; eb.textContent='Eu vou';
+          eb.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem/'+eu,true); });
+          bd.querySelector('.chosen').insertBefore(eb, bd.querySelector('.pill.add'));
+        }
+        var xx=document.createElement('button'); xx.type='button'; xx.className='prog-x'; xx.textContent='remover';
+        xx.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.d+'/progs/'+pr._k); });
+        row.appendChild(hh); row.appendChild(bd); row.appendChild(xx);
+        s2.appendChild(row);
+      });
+      var fp=document.createElement('form'); fp.className='miniform';
+      fp.innerHTML='<input type="text" class="hora" maxlength="8" placeholder="19h">'+
+        '<input type="text" class="texto" maxlength="70" placeholder="'+(a.tipo==='livre'?'Sua ideia pra esse dia':'Walmart, jantar, cinema…')+'" required>'+
+        '<button class="nav-btn" type="submit">Adicionar</button>';
+      fp.addEventListener('submit',function(e){
+        e.preventDefault();
+        var hv=fp.querySelector('.hora').value.trim(), tv=fp.querySelector('.texto').value.trim();
+        if(!tv) return;
+        fp.querySelector('.hora').value=''; fp.querySelector('.texto').value='';
+        var q={}; if(eu) q[eu]=true;
+        salvar('POST','/dias/'+a.d+'/progs',{h:hv,t:tv,por:eu?nomeDe(eu):'',quem:q,ts:Date.now()});
+      });
+      s2.appendChild(fp);
+      card.appendChild(s2);
+
       alvo.appendChild(card);
     });
+
     [].forEach.call(alvo.querySelectorAll('input[data-h]'),function(inp){
       inp.addEventListener('change',function(){
         salvar('PUT','/dias/'+inp.getAttribute('data-h')+'/horario', inp.value.trim());
