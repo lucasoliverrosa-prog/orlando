@@ -57,14 +57,17 @@ firewall de Wi-Fi de Airbnb) e não exige instalar nada em lugar nenhum.
 
 1. Entre em <https://console.firebase.google.com> com sua conta Google.
 2. **Adicionar projeto** → nome `orlando` → pode desativar o Google Analytics → criar.
-3. No menu lateral: **Criar → Realtime Database** → **Criar banco de dados**.
-   - Local: qualquer um (`us-central1` serve)
-   - Escolha **Iniciar no modo de teste** → Ativar
-4. Copie a URL que aparece no topo, algo como:
+3. No menu lateral: **Databases & Storage → Realtime Database** → **Criar banco de dados**.
+   - Escolha **Iniciar no modo de teste**
+   - Local: qualquer um
+4. Copie a URL que aparece no topo da tela do banco. O formato muda conforme a região:
 
    ```
-   https://orlando-xxxxx-default-rtdb.firebaseio.com
+   us-central1:      https://orlando-xxxxx-default-rtdb.firebaseio.com
+   outras regiões:   https://orlando-xxxxx-default-rtdb.<regiao>.firebasedatabase.app
    ```
+
+   Não monte a URL na mão — copie exatamente a que o console mostrar.
 
 ### Colar no arquivo
 
@@ -114,6 +117,8 @@ O único dado que trafega é `{slide, ts, by}` — o número do card. Nada pesso
 2. **Apresentar**
 3. Deixe em **Seguindo** (já vem selecionado)
 
+A TV mostra só o tópico, grande. Sem parágrafo, sem texto miúdo.
+
 **No seu celular**
 
 1. Abra o mesmo endereço
@@ -121,36 +126,58 @@ O único dado que trafega é `{slide, ts, by}` — o número do card. Nada pesso
 3. Toque em **Eu controlo**
 4. Arraste o dedo pro lado (ou use os botões)
 
-A TV — e o celular de qualquer parente que também esteja em modo apresentação —
-acompanha em até ~1,5 segundo.
+O seu celular vira teleprompter: mostra o tópico atual, o texto de apoio pra você falar,
+e qual é o próximo. A TV acompanha em até ~1,5 segundo, e o celular de qualquer parente
+que também esteja em **Seguindo** vai junto.
 
-O terceiro botão, **Só aqui**, desliga a sincronização daquele aparelho: útil pra
-alguém folhear no próprio ritmo sem bagunçar a tela dos outros.
+O terceiro botão, **Só aqui**, desliga a sincronização daquele aparelho — útil pra alguém
+folhear no próprio ritmo sem bagunçar a tela dos outros.
+
+### Como os cards funcionam
+
+Cada seção é um card só. Os tópicos vão **aparecendo um a um** conforme você avança: a tela
+não troca inteira, só ganha mais uma linha, e o tópico atual fica em destaque enquanto os
+anteriores ficam esmaecidos. São ~22 cards e ~50 avanços no total.
+
+Glossário e lista da mochila não são lidos na apresentação — viram um card que manda todo
+mundo abrir no celular. O conteúdo completo continua na página normal, com scroll.
 
 ### Sem sincronização
 
 Se a internet cair ou você pular a Parte 2, a apresentação continua funcionando em
 cada aparelho: setas do teclado, clique nas laterais da tela ou swipe.
 
----
-
 ## Estrutura
+
+```
+index.html      a página inteira: conteúdo, estilo, apresentação e sincronização
+README.md       este arquivo
+img/            as fotos usadas nas capas de seção
+```
 
 Arquivo único, sem build, sem dependências. As únicas coisas externas são as fontes
 do Google Fonts (se não carregarem, o fallback do sistema assume) e, se você ligar a
 Parte 2, as chamadas ao Firebase.
 
 Os slides são **gerados a partir do próprio conteúdo da página** — cada regra, cada
-card de app, cada bloco do glossário vira um slide automaticamente. Ou seja: pra
-mudar a apresentação, é só editar o HTML da página. Não existe uma segunda cópia do
-texto pra manter sincronizada.
+card de app, cada bloco do glossário vira card automaticamente, e o parágrafo de cada
+regra vira o seu texto de apoio. Ou seja: pra mudar a apresentação, é só editar o HTML
+da página. Não existe uma segunda cópia do texto pra manter sincronizada.
 
 ### Onde mexer
 
 | O que | Onde |
 |---|---|
 | Regras, textos, seções | direto no HTML, dentro de `<main>` |
+| Foto de uma seção | atributo `data-img` da `<section>` + a `<figure class="sec-img">` logo abaixo |
 | Itens da mochila | `<ul class="check-grid">` |
 | Glossário | `<dl class="gloss">` |
 | Cores (claro e escuro) | bloco `:root` no `<style>` |
 | Velocidade da sincronização | `POLL_MS` no `<script>` |
+| Desenhos das seções sem foto | objeto `PICT` no `<script>` |
+
+### Trocando ou acrescentando fotos
+
+Coloque o arquivo em `img/`, e na seção correspondente aponte as duas referências para
+ele: o `data-img` da `<section>` e o `src` do `<img>` dentro da `<figure class="sec-img">`.
+JPG de ~1600px de largura e até ~500KB.
