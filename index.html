@@ -277,8 +277,14 @@
   .ideas .addform .nav-btn{padding:8px 16px;font-size:.85rem}
 
   /* ---------- cards de carro / quarto / restaurante ---------- */
-  .cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;position:relative}
+  .card-x{position:absolute;top:10px;right:10px;width:27px;height:27px;border-radius:50%;
+    border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:1rem;line-height:1;padding:0}
+  .card-x:hover{border-color:var(--coral);color:var(--coral)}
+  .card h3{padding-right:30px}
   .card h3{font-family:var(--display);font-weight:700;font-size:1.15em;margin:0 0 3px;letter-spacing:-.015em}
   .card .meta{font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;
     color:var(--teal);margin:0 0 8px}
@@ -1738,7 +1744,8 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
       var card=document.createElement('div'); card.className='card';
       card.innerHTML='<h3>'+esc(it.nome)+'</h3>'+(it.obs?'<p class="desc">'+esc(it.obs)+'</p>':'')+
         '<span class="rest-by">sugestão de '+esc(it.por||'alguém')+'</span>';
-      var x=document.createElement('button'); x.className='del'; x.type='button'; x.textContent='remover';
+      var x=document.createElement('button'); x.className='card-x'; x.type='button';
+      x.innerHTML='&times;'; x.title='Remover sugestão'; x.setAttribute('aria-label','Remover '+(it.nome||'sugestão'));
       x.addEventListener('click',function(){ salvar('DELETE','/restaurantes/'+k); });
       card.appendChild(x);
       alvo.appendChild(card);
