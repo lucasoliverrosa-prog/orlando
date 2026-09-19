@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual da Casa Orlando</title>
+<meta name="description" content="Os combinados de convivência, carros, comida e parques da viagem de 15 pessoas a Orlando.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Karla:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#EDF3F2;--surface:#FFFFFF;--surface-2:#E3EDEB;--ink:#0F272E;
+    --muted:#5C777D;--coral:#E24F26;--teal:#0D7273;--sun:#C8860A;
+    --sun-fill:#F3C34A;--line:#CCDCD9;--mine:#D3E7E5;
+    --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+    --body:"Karla","Helvetica Neue",Arial,sans-serif;
+    --mono:"DM Mono","SFMono-Regular",Consolas,monospace;
+    --gutter:20px;--measure:64ch;
+    color-scheme:light dark;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#081418;--surface:#0F242A;--surface-2:#143038;--ink:#E4EFED;
+      --muted:#93AFB3;--coral:#FF7C55;--teal:#48BDB5;--sun:#FFC24B;
+      --sun-fill:#8A6412;--line:#1D3C44;--mine:#12414A;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#081418;--surface:#0F242A;--surface-2:#143038;--ink:#E4EFED;
+    --muted:#93AFB3;--coral:#FF7C55;--teal:#48BDB5;--sun:#FFC24B;
+    --sun-fill:#8A6412;--line:#1D3C44;--mine:#12414A;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-top:74px}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);font-size:1.0625rem;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px);
+  }
+  img{max-width:100%}
+  [hidden]{display:none !important}
+  body.tv{font-size:1.5rem;--measure:56ch}
+  body.tv .nav-chip{font-size:.85rem}
+  body.presenting{overflow:hidden}
+
+  .wrap{width:100%;max-width:1060px;margin:0 auto;padding-inline:var(--gutter)}
+
+  .topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
+  .topbar-inner{display:flex;align-items:center;gap:12px;padding-block:10px}
+  .brand{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--teal);white-space:nowrap;font-weight:500}
+  .navlinks{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none;-ms-overflow-style:none}
+  .navlinks::-webkit-scrollbar{display:none}
+  .nav-chip{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;white-space:nowrap;
+    text-decoration:none;color:var(--muted);padding:5px 11px;border-radius:999px;border:1px solid transparent}
+  .nav-chip:hover{color:var(--ink);border-color:var(--line)}
+  .nav-chip.active{color:var(--surface);background:var(--teal);border-color:var(--teal)}
+  .bar-btn{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+    background:none;border:1px solid var(--line);color:var(--muted);
+    padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .bar-btn:hover{border-color:var(--teal);color:var(--teal)}
+  .bar-btn.primary{background:var(--coral);border-color:var(--coral);color:#fff}
+  .bar-btn.on{background:var(--teal);border-color:var(--teal);color:#fff}
+  :focus-visible{outline:3px solid var(--coral);outline-offset:2px;border-radius:4px}
+
+  .hero{padding-block:clamp(40px,7vw,80px) clamp(32px,5vw,56px)}
+  .stats{display:flex;flex-wrap:wrap;gap:8px 10px;margin:0 0 26px;padding:0;list-style:none}
+  .stats li{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);padding:5px 10px;border-radius:4px}
+  .stats li b{color:var(--coral);font-weight:500}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(2.3rem,7.2vw,4.4rem);
+    line-height:.98;letter-spacing:-.025em;margin:0 0 20px;text-wrap:balance}
+  .hl{background:linear-gradient(transparent 62%, var(--sun-fill) 62%, var(--sun-fill) 94%, transparent 94%)}
+  .lede{font-size:1.15em;max-width:var(--measure);color:var(--ink);margin:0 0 10px}
+  .lede-2{max-width:var(--measure);color:var(--muted);margin:0}
+
+  section{padding-block:clamp(34px,5vw,58px);border-top:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--coral);margin:0 0 10px;display:flex;align-items:center;gap:10px}
+  .eyebrow::after{content:"";flex:1;height:1px;background:var(--line);max-width:120px}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(1.65rem,4vw,2.5rem);
+    line-height:1.05;letter-spacing:-.02em;margin:0 0 8px;text-wrap:balance}
+  .section-note{color:var(--muted);max-width:var(--measure);margin:0 0 28px}
+
+  .rules{list-style:none;margin:0;padding:0;display:grid;gap:2px;
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--line)}
+  .rules li{background:var(--surface);padding:18px 20px}
+  .rule-t{font-family:var(--display);font-weight:700;font-size:1.12em;letter-spacing:-.01em;display:block;margin-bottom:4px}
+  .rule-t .dot{color:var(--teal)}
+  .rules p{margin:0;color:var(--muted);max-width:var(--measure)}
+  .rules p + p{margin-top:8px}
+  .rules em{color:var(--ink);font-style:normal;font-weight:700}
+
+  .callout{margin:26px 0 0;padding:20px 22px;background:var(--surface-2);
+    border-left:4px solid var(--coral);border-radius:0 10px 10px 0}
+  .callout .k{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--coral);display:block;margin-bottom:6px}
+  .callout p{margin:0;max-width:var(--measure)}
+  .callout strong{font-family:var(--display);font-weight:700}
+
+  .protocol{margin-top:26px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px}
+  .protocol h3{font-family:var(--display);font-size:1.05em;font-weight:700;margin:0 0 12px}
+  .msg{font-family:var(--mono);font-size:.92em;line-height:1.5;background:var(--surface-2);
+    border-radius:12px 12px 12px 3px;padding:12px 14px;margin:0 0 10px;max-width:46ch;color:var(--ink)}
+  .msg.mine{border-radius:12px 12px 3px 12px;margin-left:auto;margin-bottom:0;background:var(--mine)}
+
+  .check-grid{display:grid;gap:10px;margin:0;padding:0;list-style:none;
+    grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+  .check-grid li{display:flex}
+  .check{display:flex;align-items:flex-start;gap:11px;width:100%;cursor:pointer;
+    background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:13px 14px}
+  .check:hover{border-color:var(--teal)}
+  .check.done{background:var(--surface-2)}
+  .check.done b{text-decoration:line-through}
+  .check input{appearance:none;-webkit-appearance:none;margin:0;flex:none;width:1.15em;height:1.15em;
+    margin-top:.18em;border:2px solid var(--muted);border-radius:5px;cursor:pointer;position:relative;background:transparent}
+  .check input:checked{background:var(--teal);border-color:var(--teal)}
+  .check input:checked::after{content:"";position:absolute;left:28%;top:8%;width:28%;height:58%;
+    border:solid var(--surface);border-width:0 2.5px 2.5px 0;transform:rotate(42deg)}
+  .check span{line-height:1.35}
+  .check b{display:block;font-family:var(--display);font-weight:700;font-size:1.02em}
+  .check small{color:var(--muted);font-size:.85em}
+  .check-reset{margin-top:14px;font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;
+    background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 0;text-decoration:underline}
+  .check-reset:hover{color:var(--coral)}
+
+  .apps{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));margin:0;padding:0;list-style:none}
+  .app{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .app .tag{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--teal);display:block;margin-bottom:7px}
+  .app h3{font-family:var(--display);font-weight:700;font-size:1.15em;margin:0 0 6px;letter-spacing:-.01em}
+  .app p{margin:0;color:var(--muted);font-size:.95em}
+
+  .gloss{margin:0;display:grid;gap:0;border-top:1px solid var(--line)}
+  .gloss .row{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:6px 26px;
+    padding:15px 0;border-bottom:1px solid var(--line);align-items:start}
+  .gloss dt{font-family:var(--display);font-weight:700;font-size:1.02em;letter-spacing:-.01em}
+  .gloss dt small{display:block;font-family:var(--mono);font-size:.68rem;font-weight:400;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-top:3px}
+  .gloss dd{margin:0;color:var(--muted);max-width:var(--measure)}
+  .gloss em{color:var(--ink);font-style:normal;font-weight:700}
+  @media (max-width:560px){ .gloss .row{grid-template-columns:1fr;gap:4px} }
+
+  .finale{border-top:1px solid var(--line)}
+  .pacts{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:26px 0 0;padding:0;list-style:none}
+  .pact{background:var(--ink);color:var(--paper);border-radius:12px;padding:22px 22px 24px;
+    display:flex;flex-direction:column;gap:8px}
+  .pact .n{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;color:var(--sun)}
+  .pact b{font-family:var(--display);font-weight:800;font-size:1.35em;line-height:1.1;letter-spacing:-.02em}
+  .pact span{font-size:.95em;opacity:.78}
+
+  footer{padding-block:34px 44px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:.75rem;letter-spacing:.04em;color:var(--muted)}
+  footer p{margin:0 0 6px;max-width:var(--measure)}
+
+  /* ---------- apresentação ---------- */
+  .deck{position:fixed;inset:0;z-index:100;background:var(--paper);display:none;flex-direction:column;
+    padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
+  body.presenting .deck{display:flex}
+  .stage{flex:1;min-height:0;overflow-y:auto;display:flex;align-items:center;
+    padding:clamp(24px,4vw,56px) clamp(20px,5vw,72px)}
+  .slide{width:100%;max-width:1200px;margin:0 auto}
+  .s-label{font-family:var(--mono);font-size:clamp(.7rem,1.3vw,1rem);letter-spacing:.18em;
+    text-transform:uppercase;color:var(--coral);margin:0 0 clamp(14px,2vw,26px)}
+  .s-title{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:1.02;
+    font-size:clamp(2rem,5.6vw,5rem);margin:0 0 clamp(14px,2vw,28px);text-wrap:balance}
+  .s-title .dot{color:var(--teal)}
+  .s-body{font-size:clamp(1.05rem,2.1vw,2rem);line-height:1.45;color:var(--muted);max-width:30ch}
+  .s-body p{margin:0 0 .6em}
+  .s-body p:last-child{margin-bottom:0}
+  .s-body em{color:var(--ink);font-style:normal;font-weight:700}
+  .s-body strong{color:var(--ink)}
+  .s-lead{max-width:26ch;font-size:1.25em;color:var(--ink)}
+  .s-list{list-style:none;margin:0;padding:0;display:grid;gap:clamp(8px,1.2vw,16px);
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .s-list li{font-size:clamp(1rem,1.9vw,1.75rem);font-family:var(--display);font-weight:700;
+    line-height:1.2;background:var(--surface);border:1px solid var(--line);
+    border-radius:10px;padding:clamp(12px,1.6vw,22px)}
+  .s-list li small{display:block;font-family:var(--body);font-weight:400;
+    font-size:.62em;color:var(--muted);margin-top:.3em;line-height:1.35}
+  .s-msg{font-family:var(--mono);font-size:clamp(.95rem,1.8vw,1.6rem);line-height:1.45;
+    background:var(--surface-2);border-radius:16px 16px 16px 4px;padding:clamp(14px,1.8vw,24px);
+    margin:0 0 clamp(10px,1.2vw,16px);max-width:34ch;color:var(--ink)}
+  .s-msg.mine{border-radius:16px 16px 4px 16px;margin-left:auto;margin-bottom:0;background:var(--mine)}
+  .s-pacts{display:grid;gap:clamp(10px,1.4vw,18px);grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    list-style:none;margin:0;padding:0}
+  .s-pact{background:var(--ink);color:var(--paper);border-radius:14px;padding:clamp(16px,2vw,28px)}
+  .s-pact .n{font-family:var(--mono);font-size:clamp(.65rem,1.1vw,.9rem);letter-spacing:.16em;color:var(--sun);display:block;margin-bottom:.5em}
+  .s-pact b{font-family:var(--display);font-weight:800;font-size:clamp(1.1rem,2.2vw,2rem);line-height:1.1;display:block}
+  .s-gloss{margin:0}
+  .s-gloss .g{padding:clamp(10px,1.4vw,18px) 0;border-top:1px solid var(--line)}
+  .s-gloss dt{font-family:var(--display);font-weight:700;font-size:clamp(1.05rem,2vw,1.9rem);letter-spacing:-.01em}
+  .s-gloss dd{margin:.2em 0 0;color:var(--muted);font-size:clamp(.95rem,1.6vw,1.4rem);line-height:1.4;max-width:46ch}
+  .s-gloss em{color:var(--ink);font-style:normal;font-weight:700}
+
+  .deckbar{flex:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:12px clamp(16px,3vw,32px);border-top:1px solid var(--line);background:var(--surface)}
+  .deckbar .count{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;color:var(--muted);
+    font-variant-numeric:tabular-nums;min-width:5.5em}
+  .deckbar .spacer{flex:1}
+  .nav-btn{font-family:var(--display);font-weight:700;font-size:1rem;background:var(--ink);color:var(--paper);
+    border:none;border-radius:999px;padding:11px 22px;cursor:pointer}
+  .nav-btn[disabled]{opacity:.35;cursor:default}
+  .nav-btn.ghost{background:none;color:var(--muted);border:1px solid var(--line);font-family:var(--mono);
+    font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:9px 16px}
+  .nav-btn.ghost:hover{color:var(--coral);border-color:var(--coral)}
+  .roles{display:flex;gap:4px;background:var(--surface-2);border-radius:999px;padding:4px}
+  .roles button{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;
+    border:none;background:none;color:var(--muted);padding:7px 12px;border-radius:999px;cursor:pointer}
+  .roles button[aria-pressed="true"]{background:var(--teal);color:#fff}
+  .sync-note{font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;color:var(--muted);width:100%;margin:0}
+  .sync-note b{color:var(--teal);font-weight:500}
+  .sync-note.warn b{color:var(--coral)}
+  body.follower .deckbar .nav-btn:not(.ghost),
+  body.follower .deckbar .count{display:none}
+  .tapzone{position:absolute;top:0;bottom:70px;width:20%;background:none;border:none;cursor:pointer;z-index:1}
+  .tapzone.prev{left:0}
+  .tapzone.next{right:0}
+  body.follower .tapzone{display:none}
+
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;scroll-behavior:auto !important}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap topbar-inner">
+    <span class="brand">Orlando · 15 dias</span>
+    <nav class="navlinks" aria-label="Seções">
+      <a class="nav-chip" href="#porque">Por quê</a>
+      <a class="nav-chip" href="#casa">Casa</a>
+      <a class="nav-chip" href="#comida">Comida</a>
+      <a class="nav-chip" href="#carros">Carros</a>
+      <a class="nav-chip" href="#parques">Parques</a>
+      <a class="nav-chip" href="#guias">Guias</a>
+      <a class="nav-chip" href="#mochila">Mochila</a>
+      <a class="nav-chip" href="#apps">Apps</a>
+      <a class="nav-chip" href="#glossario">Glossário</a>
+    </nav>
+    <button class="bar-btn" id="tvBtn" type="button" aria-pressed="false">Modo TV</button>
+    <button class="bar-btn primary" id="presentBtn" type="button">Apresentar</button>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <header class="hero">
+    <ul class="stats">
+      <li><b>15</b> pessoas</li>
+      <li><b>15</b> dias</li>
+      <li><b>9</b> dias de parque</li>
+      <li><b>4</b> carros</li>
+      <li><b>1</b> casa</li>
+    </ul>
+    <h1>Combinado agora,<br><span class="hl">paz depois.</span></h1>
+    <p class="lede">Isso aqui não é sermão nem lista de castigos. São os acordos que fazem 15 pessoas dividirem uma casa por 15 dias e sair de lá querendo marcar a próxima viagem.</p>
+    <p class="lede-2">Leia uma vez hoje. Depois é só abrir no celular quando bater a dúvida — o link fica com vocês a viagem inteira.</p>
+  </header>
+
+  <section id="porque">
+    <p class="eyebrow">O ponto de partida</p>
+    <h2>Ninguém briga por maldade. Briga por expectativa.</h2>
+    <p class="section-note">Quase toda treta de viagem em grupo nasce de alguém que achou que ia ser de um jeito e foi de outro. A solução não é regra rígida, é aviso antecipado.</p>
+    <ul class="rules">
+      <li>
+        <span class="rule-t">Somos 15, não uma pessoa de 15 cabeças<span class="dot">.</span></span>
+        <p>Cada um tem ritmo, sono, fome e medo de montanha-russa em horários diferentes. A viagem funciona quando a gente aceita isso em vez de tentar sincronizar tudo.</p>
+      </li>
+      <li>
+        <span class="rule-t">Cansaço transforma detalhe em briga<span class="dot">.</span></span>
+        <p>No dia 9, depois de 20 mil passos e 34 °C, uma louça na pia deixa de ser louça na pia. Por isso os combinados pequenos importam mais do que parecem.</p>
+      </li>
+      <li>
+        <span class="rule-t">Aqui tudo custa em dólar<span class="dot">.</span></span>
+        <p>O que no Brasil seria "deixa que eu pago" aqui pesa no bolso de alguém. Trate dinheiro dos outros com o mesmo cuidado que trataria o seu.</p>
+      </li>
+    </ul>
+    <div class="callout">
+      <span class="k">A regra que resume todas</span>
+      <p><strong>Avisou no grupo, tá combinado.</strong> Se não foi pro grupo, não existe. Ninguém é obrigado a adivinhar plano de ninguém — e ninguém pode cobrar depois o que não avisou antes.</p>
+    </div>
+  </section>
+
+  <section id="casa">
+    <p class="eyebrow">Convivência</p>
+    <h2>A casa</h2>
+    <p class="section-note">Espaço compartilhado tem uma lógica só: sempre tem alguém depois de você.</p>
+    <ul class="rules">
+      <li>
+        <span class="rule-t">Cozinha: sujou, lavou<span class="dot">.</span></span>
+        <p>Na hora, não "daqui a pouco". Tem sempre alguém esperando a pia, a frigideira ou a bancada pra fazer a própria comida. <em>Louça na pia é fila pros outros.</em></p>
+      </li>
+      <li>
+        <span class="rule-t">Bagunça mora no seu quarto<span class="dot">.</span></span>
+        <p>Ninguém é obrigado a manter o quarto arrumado — é seu, faça o que quiser. Mas área comum é de todo mundo: sala, cozinha, varanda e banheiro social ficam limpos.</p>
+        <p>Regra prática: se você levou pra sala, você leva de volta.</p>
+      </li>
+      <li>
+        <span class="rule-t">Geladeira: fita branca e canetão<span class="dot">.</span></span>
+        <p>Comprei fita e canetão e eles ficam na cozinha. <em>Escreveu o nome = é seu, ninguém pega.</em> <em>Sem nome = é livre, pode pegar.</em></p>
+        <p>Não quer dividir e não é perecível? Guarda no quarto e resolve o problema na origem.</p>
+      </li>
+    </ul>
+    <div class="callout">
+      <span class="k">Por que a fita existe</span>
+      <p><strong>Usar a fita não é ser chato, é ser claro.</strong> Ela evita a conversa constrangedora de "cadê meu iogurte" antes dela acontecer.</p>
+    </div>
+  </section>
+
+  <section id="comida">
+    <p class="eyebrow">Mercado e refeições</p>
+    <h2>Comida é individual</h2>
+    <p class="section-note">Cada um compra o seu. Com 15 pessoas é impossível chegar num consenso do que todo mundo come — e dividir a conta de gosto alheio é receita de ressentimento.</p>
+    <ul class="rules">
+      <li>
+        <span class="rule-t">Compre o seu, do seu jeito<span class="dot">.</span></span>
+        <p>Sem vaquinha de mercado, sem rateio de café da manhã. Quem quiser combinar uma refeição em conjunto, combina — mas é exceção, não o padrão.</p>
+      </li>
+      <li>
+        <span class="rule-t">Lanche e água do parque saem do mercado<span class="dot">.</span></span>
+        <p>Comprar snack e garrafa antes economiza muito e salva o humor na fila. Deixe separado na noite anterior, junto com a mochila.</p>
+      </li>
+      <li>
+        <span class="rule-t">Espere ser oferecido<span class="dot">.</span></span>
+        <p>Só porque você não se importa em dividir não significa que o outro pensa igual. <em>Ficar pedindo coisa que custa em dólar cansa.</em> Se a pessoa quiser oferecer, ela oferece — e aí é ótimo.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section id="carros">
+    <p class="eyebrow">Logística</p>
+    <h2>Carros e horários</h2>
+    <p class="section-note">São 4 carros. Isso é liberdade, não um comboio. Ninguém precisa sair junto nem voltar junto.</p>
+    <ul class="rules">
+      <li>
+        <span class="rule-t">Combine com o seu grupo, avise no grupo grande<span class="dot">.</span></span>
+        <p>Vai fazer alguma coisa? Manda no grupo <em>com antecedência</em>: o que é, que horas sai e quem tá indo. Quem quiser ir, vai.</p>
+      </li>
+      <li>
+        <span class="rule-t">Não vamos esperar todo mundo<span class="dot">.</span></span>
+        <p>Quem avisou o horário, sai no horário. <em>Pedir pra esperar é o que trava o dia de todo mundo.</em> Perdeu o carro? Tem Uber em Orlando e ele é a solução, não o drama.</p>
+      </li>
+      <li>
+        <span class="rule-t">Quem dirige decide a parada<span class="dot">.</span></span>
+        <p>Mercado, gasolina, banheiro: quem tá no volante já tá fazendo um favor. Combine antes de sair se precisar parar em algum lugar.</p>
+      </li>
+    </ul>
+    <div class="protocol">
+      <h3>O aviso que resolve 90% dos problemas</h3>
+      <p class="msg">Galera, eu e a Ju vamos sair 8h pro Magic Kingdom, carro prata. Tem 3 lugares. Quem anima?</p>
+      <p class="msg mine">Bora! Tô dentro.</p>
+    </div>
+  </section>
+
+  <section id="parques">
+    <p class="eyebrow">9 dias de parque</p>
+    <h2>Nos parques</h2>
+    <p class="section-note">Regra mãe: <strong>tempo é a única coisa que a gente não recupera</strong>. Fila a gente encara, mas hora perdida no estacionamento porque alguém esqueceu algo, não.</p>
+    <ul class="rules">
+      <li>
+        <span class="rule-t">Água tem, sabor nem sempre<span class="dot">.</span></span>
+        <p>Todo parque dá copo de água de graça nas lanchonetes. Só que a água da Flórida tem um gosto característico que incomoda muita gente. Se isso é um problema pra você, leve a sua garrafa cheia de casa.</p>
+      </li>
+      <li>
+        <span class="rule-t">Assadura acaba com o seu dia<span class="dot">.</span></span>
+        <p>São 12 horas andando, suando, com calor e umidade. <em>Se você tem perna grossa, não use short curto.</em> A pele atrita, assa, e depois você não consegue mais andar — e aí não tem parque que valha.</p>
+        <p>Prefira short mais comprido, bermuda ciclista por baixo ou calça leve. E compre <em>pó antiassadura</em> na farmácia logo nos primeiros dias: passa antes de sair e previne. É barato e salva a viagem.</p>
+      </li>
+      <li>
+        <span class="rule-t">Capa de chuva, sempre<span class="dot">.</span></span>
+        <p>Chove quase todo fim de tarde na Flórida — forte e rápido. Quem tem capa continua o dia, quem não tem compra a preço de parque ou vai embora encharcado.</p>
+      </li>
+      <li>
+        <span class="rule-t">Mochila pequena, sem exceção<span class="dot">.</span></span>
+        <p>Nas atrações radicais você é obrigado a guardar tudo no <em>locker</em>, e o armário é pequeno. Mochila grande não cabe, atrasa o grupo e vira dor de cabeça. Só leve mochilão se você já sabe que não vai em atração radical.</p>
+      </li>
+      <li>
+        <span class="rule-t">Protetor solar de manhã e de novo à tarde<span class="dot">.</span></span>
+        <p>Passar uma vez às 7h não cobre 12 horas de sol. Queimadura no dia 2 estraga os outros 7 dias de parque.</p>
+      </li>
+      <li>
+        <span class="rule-t">Carregador portátil é item obrigatório<span class="dot">.</span></span>
+        <p>O celular é seu ingresso, seu mapa, seu app de fila e sua forma de achar o grupo. Sem bateria você vira dependente de outra pessoa — e isso trava os dois.</p>
+      </li>
+      <li>
+        <span class="rule-t">Conecte no Wi-Fi do parque<span class="dot">.</span></span>
+        <p>Todos os parques têm rede gratuita. Conecte logo na entrada: economiza o seu plano internacional e faz os apps funcionarem direito nas áreas cheias.</p>
+      </li>
+      <li>
+        <span class="rule-t">A gente não anda todo mundo junto<span class="dot">.</span></span>
+        <p>Tem atração pra todo tipo de gente e ninguém gosta de tudo. Vamos seguir o fluxo em grupos que se formam e se desfazem durante o dia — <em>o combinado é só avisar</em>.</p>
+        <p>Olhe no mapa do app quanto tempo leva pra chegar, avise, e quem quiser espera se não for muita coisa.</p>
+      </li>
+    </ul>
+    <div class="protocol">
+      <h3>O protocolo do "quem anima?"</h3>
+      <p class="msg">Tô indo pra Rip Ride Rockit com o Pedro, 10 min de caminhada daqui. Quem anima?</p>
+      <p class="msg mine">Vou não, tô na fila do Minion. Encontro vocês depois.</p>
+    </div>
+  </section>
+
+  <section id="guias">
+    <p class="eyebrow">Conversa franca</p>
+    <h2>Eu e a Josi não somos guias</h2>
+    <p class="section-note">A gente já esteve nos parques e vai ajudar com muito prazer — mas com um combinado.</p>
+    <ul class="rules">
+      <li>
+        <span class="rule-t">A gente também está de férias<span class="dot">.</span></span>
+        <p>Ficar de responsável pelo grupo inteiro é cansativo e não foi pra isso que viemos. Queremos aproveitar tanto quanto vocês — e queremos poder repetir essa viagem.</p>
+      </li>
+      <li>
+        <span class="rule-t">Cada um cuida das próprias coisas<span class="dot">.</span></span>
+        <p>Ingresso, celular, bolsa, remédio, documento, criança. Ninguém vai conferir a mochila de ninguém.</p>
+      </li>
+      <li>
+        <span class="rule-t">Tente antes de perguntar<span class="dot">.</span></span>
+        <p>Pedir comida em inglês, ler o mapa, pesquisar a atração: <em>isso faz parte do passeio</em>. Tente, erre, ria — e aí a gente ajuda no que travou de verdade.</p>
+      </li>
+      <li>
+        <span class="rule-t">Pergunta boa a gente adora<span class="dot">.</span></span>
+        <p>"Essa atração dá enjoo?", "vale a pena de manhã ou à noite?" — isso é conhecimento que a gente tem e divide feliz. O que cansa é virar central de atendimento pra coisa que o app responde em 10 segundos.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section id="mochila">
+    <p class="eyebrow">Toda noite antes de dormir</p>
+    <h2>A mochila do parque</h2>
+    <p class="section-note">Monte na véspera, não às 7h da manhã com o carro buzinando. Marque os itens conforme for colocando — a marcação fica salva no seu celular.</p>
+    <ul class="check-grid" id="checklist">
+      <li><label class="check"><input type="checkbox" id="ck-agua"><span><b>Garrafa de água cheia</b><small>Da geladeira de casa, não do parque</small></span></label></li>
+      <li><label class="check"><input type="checkbox" id="ck-capa"><span><b>Capa de chuva</b><small>Sim, mesmo com sol de manhã</small></span></label></li>
+      <li><label class="check"><input type="checkbox" id="ck-protetor"><span><b>Protetor solar</b><small>Pra reaplicar à tarde</small></span></label></li>
+      <li><label class="check"><input type="checkbox" id="ck-power"><span><b>Carregador portátil + cabo</b><small>Carregado de verdade</small></span></label></li>
+      <li><label class="check"><input type="checkbox" id="ck-lanche"><span><b>Lanche do mercado</b><small>Barrinha, biscoito, fruta</small></span></label></li>
+      <li><label class="check"><input type="checkbox" id="ck-oculos"><span><b>Óculos de sol e boné</b><small>12 horas de sol aberto</small></span></label></li>
+      <li><label class="check"><input type="checkbox" id="ck-remedio"><span><b>Remédio de uso pessoal</b><small>Dor de cabeça, enjoo, alergia</small></span></label></li>
+      <li><label class="check"><input type="checkbox" id="ck-ingresso"><span><b>Ingresso no app e celular a 100%</b><small>Confere antes de sair de casa</small></span></label></li>
+    </ul>
+    <button class="check-reset" id="resetCheck" type="button">Desmarcar tudo pro dia seguinte</button>
+  </section>
+
+  <section id="apps">
+    <p class="eyebrow">Baixe e faça login hoje</p>
+    <h2>Os apps da viagem</h2>
+    <p class="section-note">Instale e teste o login <strong>antes</strong> do primeiro dia de parque. Descobrir que a senha não funciona na catraca, com 15 pessoas esperando, é o pior jeito de começar.</p>
+    <ul class="apps">
+      <li class="app">
+        <span class="tag">Parques Disney</span>
+        <h3>My Disney Experience</h3>
+        <p>Ingresso, mapa, tempo de fila em tempo real, pedido de comida pelo celular e compra do Lightning Lane. É o app que você vai mais abrir.</p>
+      </li>
+      <li class="app">
+        <span class="tag">Parques Universal</span>
+        <h3>Universal Orlando Resort</h3>
+        <p>Mesma ideia do lado da Universal: ingresso, mapa, filas, Express Pass e fila virtual das atrações mais concorridas.</p>
+      </li>
+      <li class="app">
+        <span class="tag">Inglês na hora</span>
+        <h3>Google Tradutor</h3>
+        <p>Baixe o pacote de inglês para uso offline. A câmera traduz cardápio e placa em tempo real — resolve 90% do aperto na hora de pedir comida.</p>
+      </li>
+      <li class="app">
+        <span class="tag">Dúvida de qualquer tipo</span>
+        <h3>ChatGPT</h3>
+        <p>Pra perguntar como se pede algo em inglês, o que é aquela atração, se dá enjoo, o que fazer com chuva. Use o modo de voz e fale em português.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section id="glossario">
+    <p class="eyebrow">Vocabulário de parque</p>
+    <h2>Palavras que você vai ouvir</h2>
+    <p class="section-note">Saber o que significam economiza tempo e evita aquele olhar perdido na frente do atendente.</p>
+    <dl class="gloss">
+      <div class="row">
+        <dt>How many? <small>Quantos são?</small></dt>
+        <dd>A pergunta que <em>sempre</em> vem: na fila do restaurante, no balcão, na entrada da atração. Não precisa montar frase — <em>levanta os dedinhos e fala o número em inglês</em>. "Four." Resolvido.</dd>
+      </div>
+      <div class="row">
+        <dt>Locker <small>Armário</small></dt>
+        <dd>Armário obrigatório antes de atrações radicais. Costuma ser gratuito pelo tempo da fila e pequeno — daí a regra da mochila compacta.</dd>
+      </div>
+      <div class="row">
+        <dt>Single Rider <small>Fila individual</small></dt>
+        <dd>Fila para quem topa andar sozinho, preenchendo assentos vagos. Muito mais rápida. Vocês não sentam juntos, mas fazem a atração na metade do tempo.</dd>
+      </div>
+      <div class="row">
+        <dt>Rider Switch <small>Child Swap na Universal</small></dt>
+        <dd>Quando alguém do grupo não pode ou não quer andar (criança pequena, por exemplo), um adulto espera e depois entra sem refazer a fila.</dd>
+      </div>
+      <div class="row">
+        <dt>Lightning Lane <small>Disney · pago</small></dt>
+        <dd>O fura-fila da Disney, comprado no app. O <em>Multi Pass</em> cobre várias atrações do dia; o <em>Single Pass</em> é comprado atração por atração, para as mais disputadas.</dd>
+      </div>
+      <div class="row">
+        <dt>Express Pass <small>Universal · pago</small></dt>
+        <dd>O equivalente na Universal. Existe a versão do dia inteiro e a compra avulsa por atração dentro do app.</dd>
+      </div>
+      <div class="row">
+        <dt>Virtual Queue <small>Fila virtual</small></dt>
+        <dd>Em atrações novas, você entra numa fila pelo app em horário marcado e volta quando for chamado. Fique atento ao horário de abertura da fila.</dd>
+      </div>
+      <div class="row">
+        <dt>Mobile Order <small>Pedido pelo app</small></dt>
+        <dd>Peça a comida pelo celular, escolha a janela de horário e só vá ao balcão quando o app avisar. Economiza meia hora de fila fácil.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="finale" id="fechamento">
+    <p class="eyebrow">Se você esquecer todo o resto</p>
+    <h2>Os três combinados</h2>
+    <p class="section-note">Se der dúvida em qualquer situação da viagem, um desses três resolve.</p>
+    <ul class="pacts">
+      <li class="pact">
+        <span class="n">01</span>
+        <b>Avisou no grupo, tá combinado.</b>
+        <span>Antes, não depois. O que não foi pro grupo não existe — e não pode virar cobrança.</span>
+      </li>
+      <li class="pact">
+        <span class="n">02</span>
+        <b>Sujou, lavou. Usou, guardou.</b>
+        <span>Sempre tem alguém depois de você na cozinha, no banheiro e na sala.</span>
+      </li>
+      <li class="pact">
+        <span class="n">03</span>
+        <b>Ninguém espera, ninguém cobra.</b>
+        <span>Cada um no seu ritmo, com aviso. Liberdade dos dois lados.</span>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Manual da Casa Orlando — feito pro primeiro dia de viagem e pra consulta durante os 15 dias.</p>
+    <p>Dúvida, mudança de plano ou regra nova? Manda no grupo. Sempre.</p>
+  </footer>
+
+</main>
+
+<div class="deck" id="deck" role="dialog" aria-label="Modo apresentação" aria-modal="true">
+  <button class="tapzone prev" id="tapPrev" type="button" aria-label="Slide anterior"></button>
+  <button class="tapzone next" id="tapNext" type="button" aria-label="Próximo slide"></button>
+  <div class="stage" id="stage"></div>
+  <div class="deckbar">
+    <span class="count" id="deckCount">1 / 1</span>
+    <button class="nav-btn" id="prevBtn" type="button">← Voltar</button>
+    <button class="nav-btn" id="nextBtn" type="button">Avançar →</button>
+    <span class="spacer"></span>
+    <div class="roles" id="roles" hidden>
+      <button type="button" data-role="follow" aria-pressed="true">Seguindo</button>
+      <button type="button" data-role="ctl" aria-pressed="false">Eu controlo</button>
+      <button type="button" data-role="solo" aria-pressed="false">Só aqui</button>
+    </div>
+    <button class="nav-btn ghost" id="exitBtn" type="button">Sair</button>
+    <p class="sync-note" id="syncNote">Passando os slides só neste aparelho.</p>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   SINCRONIZAÇÃO — preencha SYNC_URL com a URL do seu Firebase Realtime Database.
+   Exemplo: "https://SEU-PROJETO-default-rtdb.firebaseio.com/orlando/c7e06f64b6.json"
+   Deixe "" (vazio) e a apresentação funciona normalmente, só sem sincronizar.
+   O passo a passo está no README.md deste repositório.
+   ========================================================================== */
+var SYNC_URL = "";
+var POLL_MS  = 1500;
+
+(function(){
+  var KEY_TV='orlando_tv_mode', KEY_CK='orlando_mochila';
+  var body=document.body;
+
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+
+  /* ---------- modo TV ---------- */
+  var tvBtn=document.getElementById('tvBtn');
+  function paintTv(on){
+    tvBtn.setAttribute('aria-pressed',on?'true':'false');
+    tvBtn.className = on ? 'bar-btn on' : 'bar-btn';
+  }
+  if(load(KEY_TV)==='1'){ body.classList.add('tv'); paintTv(true); }
+  tvBtn.addEventListener('click',function(){
+    var on=body.classList.toggle('tv'); paintTv(on); store(KEY_TV,on?'1':'0');
+  });
+
+  /* ---------- checklist ---------- */
+  var boxes=[].slice.call(document.querySelectorAll('#checklist input[type=checkbox]'));
+  var saved={};
+  try{ saved=JSON.parse(load(KEY_CK)||'{}')||{}; }catch(e){ saved={}; }
+  function paintBox(b){
+    var lab=b.parentNode;
+    if(b.checked) lab.className='check done'; else lab.className='check';
+  }
+  function persist(){
+    var out={};
+    boxes.forEach(function(b){ if(b.checked) out[b.id]=1; });
+    store(KEY_CK,JSON.stringify(out));
+  }
+  boxes.forEach(function(b){
+    if(saved[b.id]) b.checked=true;
+    paintBox(b);
+    b.addEventListener('change',function(){ paintBox(b); persist(); });
+  });
+  document.getElementById('resetCheck').addEventListener('click',function(){
+    boxes.forEach(function(b){ b.checked=false; paintBox(b); }); persist();
+  });
+
+  /* ---------- scrollspy ---------- */
+  var chips=[].slice.call(document.querySelectorAll('.nav-chip'));
+  var chipMap={};
+  chips.forEach(function(c){ chipMap[c.getAttribute('href').slice(1)]=c; });
+  if('IntersectionObserver' in window){
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          chips.forEach(function(c){ c.className='nav-chip'; });
+          var chip=chipMap[en.target.id];
+          if(chip) chip.className='nav-chip active';
+        }
+      });
+    },{rootMargin:'-74px 0px -65% 0px',threshold:0});
+    Object.keys(chipMap).forEach(function(id){
+      var s=document.getElementById(id); if(s) obs.observe(s);
+    });
+  }
+
+  /* ================= slides ================= */
+  var slides=[];
+  function esc(t){ var d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+
+  slides.push({
+    label:'Orlando · 15 pessoas · 15 dias',
+    title:'Combinado agora,<br><span class="hl">paz depois.</span>',
+    body:'<p>Os acordos que fazem 15 pessoas dividirem uma casa por 15 dias e sair de lá querendo marcar a próxima viagem.</p>'
+  });
+
+  [].forEach.call(document.querySelectorAll('main > section'),function(sec){
+    var eb=sec.querySelector('.eyebrow');
+    var label=eb?eb.textContent.replace(/\s+/g,' ').trim():'';
+    var h2=sec.querySelector('h2');
+    var note=sec.querySelector('.section-note');
+    slides.push({label:label,title:h2?h2.innerHTML:'',body:note?'<p>'+note.innerHTML+'</p>':''});
+
+    [].forEach.call(sec.children,function(el){
+      var cn=' '+el.className+' ';
+      if(cn.indexOf(' rules ')>-1){
+        [].forEach.call(el.children,function(li){
+          var t=li.querySelector('.rule-t');
+          var ps=[].map.call(li.querySelectorAll('p'),function(p){ return '<p>'+p.innerHTML+'</p>'; }).join('');
+          slides.push({label:label,title:t?t.innerHTML:'',body:ps});
+        });
+      } else if(cn.indexOf(' callout ')>-1){
+        var k=el.querySelector('.k'), p=el.querySelector('p');
+        slides.push({label:k?k.textContent.trim():label,title:'',
+          raw:'<div class="s-body"><p class="s-lead">'+(p?p.innerHTML:'')+'</p></div>'});
+      } else if(cn.indexOf(' protocol ')>-1){
+        var h3=el.querySelector('h3');
+        var msgs=[].map.call(el.querySelectorAll('.msg'),function(m){
+          return '<p class="s-msg'+(m.className.indexOf('mine')>-1?' mine':'')+'">'+m.innerHTML+'</p>';
+        }).join('');
+        slides.push({label:label,title:h3?h3.textContent:'',raw:'<div style="max-width:900px">'+msgs+'</div>'});
+      } else if(cn.indexOf(' check-grid ')>-1){
+        var items=[].map.call(el.querySelectorAll('.check'),function(c){
+          var b=c.querySelector('b'), s=c.querySelector('small');
+          return '<li>'+esc(b?b.textContent:'')+(s?'<small>'+esc(s.textContent)+'</small>':'')+'</li>';
+        }).join('');
+        slides.push({label:label,title:'O que vai na mochila',raw:'<ul class="s-list">'+items+'</ul>'});
+      } else if(cn.indexOf(' apps ')>-1){
+        [].forEach.call(el.children,function(li){
+          var tag=li.querySelector('.tag'), h3a=li.querySelector('h3'), pa=li.querySelector('p');
+          slides.push({label:tag?tag.textContent.trim():label,title:h3a?h3a.textContent:'',body:pa?'<p>'+pa.innerHTML+'</p>':''});
+        });
+      } else if(cn.indexOf(' gloss ')>-1){
+        var rows=[].slice.call(el.querySelectorAll('.row'));
+        for(var i=0;i<rows.length;i+=3){
+          var chunk=rows.slice(i,i+3).map(function(r){
+            var dt=r.querySelector('dt'), dd=r.querySelector('dd');
+            return '<div class="g"><dt>'+(dt?dt.innerHTML:'')+'</dt><dd>'+(dd?dd.innerHTML:'')+'</dd></div>';
+          }).join('');
+          slides.push({label:label,title:'',raw:'<dl class="s-gloss">'+chunk+'</dl>'});
+        }
+      } else if(cn.indexOf(' pacts ')>-1){
+        var pacts=[].map.call(el.children,function(li){
+          var n=li.querySelector('.n'), b=li.querySelector('b');
+          return '<li class="s-pact"><span class="n">'+esc(n?n.textContent:'')+'</span><b>'+esc(b?b.textContent:'')+'</b></li>';
+        }).join('');
+        slides.push({label:label,title:'',raw:'<ul class="s-pacts">'+pacts+'</ul>'});
+      }
+    });
+  });
+
+  /* ================= deck ================= */
+  var stage=document.getElementById('stage'),
+      countEl=document.getElementById('deckCount'),
+      prevBtn=document.getElementById('prevBtn'),
+      nextBtn=document.getElementById('nextBtn'),
+      rolesEl=document.getElementById('roles'),
+      syncNote=document.getElementById('syncNote');
+
+  var idx=0, role='solo';
+  var me = Math.random().toString(36).slice(2,10);
+  var lastSeenTs = 0, failures = 0, timer = null;
+
+  function render(){
+    var s=slides[idx]||{};
+    var html='<div class="slide">';
+    if(s.label) html+='<p class="s-label">'+s.label+'</p>';
+    if(s.title) html+='<h2 class="s-title">'+s.title+'</h2>';
+    if(s.raw) html+=s.raw;
+    else if(s.body) html+='<div class="s-body">'+s.body+'</div>';
+    html+='</div>';
+    stage.innerHTML=html;
+    stage.scrollTop=0;
+    countEl.textContent=(idx+1)+' / '+slides.length;
+    prevBtn.disabled=idx===0;
+    nextBtn.disabled=idx===slides.length-1;
+  }
+
+  function go(n,broadcast){
+    n=Math.max(0,Math.min(slides.length-1,n));
+    if(n===idx) return;
+    idx=n; render();
+    if(broadcast!==false) publish();
+  }
+
+  function note(txt,warn){
+    syncNote.innerHTML=txt;
+    syncNote.className = warn ? 'sync-note warn' : 'sync-note';
+  }
+
+  /* ---- canal compartilhado (Firebase Realtime Database via REST) ---- */
+  function publish(){
+    if(role!=='ctl'||!SYNC_URL) return;
+    lastSeenTs = Date.now();
+    var payload = JSON.stringify({slide:idx, ts:lastSeenTs, by:me});
+    if(window.fetch){
+      fetch(SYNC_URL,{method:'PUT',body:payload,headers:{'Content-Type':'application/json'}})
+        .then(function(){ failures=0; })
+        .catch(function(){ failures++; if(failures>2) note('Sem conexão com o canal. Os outros aparelhos <b>não</b> estão seguindo.',true); });
+    }
+  }
+
+  function pull(){
+    if(!SYNC_URL||role!=='follow'||!window.fetch) return;
+    fetch(SYNC_URL,{cache:'no-store'}).then(function(r){ return r.json(); }).then(function(d){
+      failures=0;
+      if(!d||typeof d.slide!=='number'||d.by===me) return;
+      if((d.ts||0)<=lastSeenTs) return;
+      lastSeenTs=d.ts||Date.now();
+      go(d.slide,false);
+    }).catch(function(){
+      failures++;
+      if(failures===3) note('Sem conexão com o canal. Passe os slides por aqui mesmo.',true);
+    });
+  }
+
+  function startPoll(){
+    if(timer) clearInterval(timer);
+    timer=setInterval(pull,POLL_MS);
+    pull();
+  }
+  function stopPoll(){ if(timer){ clearInterval(timer); timer=null; } }
+
+  function setRole(r){
+    role=r;
+    [].forEach.call(rolesEl.querySelectorAll('button'),function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-role')===r?'true':'false');
+    });
+    if(r==='follow'){ body.className=body.className.replace(/\s*follower/,'')+' follower'; }
+    else { body.className=body.className.replace(/\s*follower/,''); }
+
+    stopPoll();
+    if(r==='ctl'){
+      note('Você está <b>no controle</b>. Todo mundo em modo Seguindo acompanha os seus slides.');
+      lastSeenTs=0; publish();
+    } else if(r==='follow'){
+      note('<b>Seguindo</b> quem está no controle. Este aparelho só exibe.');
+      startPoll();
+    } else {
+      note('Passando os slides <b>só neste aparelho</b>.');
+    }
+  }
+
+  document.getElementById('presentBtn').addEventListener('click',function(){
+    body.className=body.className+' presenting';
+    render();
+  });
+  document.getElementById('exitBtn').addEventListener('click',function(){
+    body.className=body.className.replace(/\s*presenting/,'');
+    if(role!=='solo') setRole('solo');
+  });
+  prevBtn.addEventListener('click',function(){ go(idx-1); });
+  nextBtn.addEventListener('click',function(){ go(idx+1); });
+  document.getElementById('tapPrev').addEventListener('click',function(){ go(idx-1); });
+  document.getElementById('tapNext').addEventListener('click',function(){ go(idx+1); });
+
+  [].forEach.call(rolesEl.querySelectorAll('button'),function(b){
+    b.addEventListener('click',function(){ setRole(b.getAttribute('data-role')); });
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(body.className.indexOf('presenting')<0) return;
+    if(e.key==='Escape'){ document.getElementById('exitBtn').click(); return; }
+    if(role==='follow') return;
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); go(idx+1); }
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(idx-1); }
+  });
+
+  var tx=0,ty=0;
+  stage.addEventListener('touchstart',function(e){
+    tx=e.changedTouches[0].clientX; ty=e.changedTouches[0].clientY;
+  },false);
+  stage.addEventListener('touchend',function(e){
+    if(role==='follow') return;
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5) go(dx<0?idx+1:idx-1);
+  },false);
+
+  if(SYNC_URL && window.fetch){
+    rolesEl.hidden=false;
+    setRole('follow');
+  } else {
+    setRole('solo');
+  }
+})();
+</script>
+</body>
+</html>
