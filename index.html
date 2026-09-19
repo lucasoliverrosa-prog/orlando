@@ -321,6 +321,11 @@
   .crono-bar select{font-family:var(--body);font-size:.88rem;padding:7px 10px;border-radius:8px;
     border:1px solid var(--line);background:var(--surface);color:var(--ink)}
   .day.extra{border-left:4px solid var(--coral)}
+  .day.vago{border-style:dashed;background:transparent}
+  .day.vago .day-t{opacity:.5;font-weight:500}
+  .day.vago .day-date{opacity:.55}
+  .day.vago .day-head:hover{background:var(--surface-2)}
+  .count.livre{font-style:italic;color:var(--sun)}
   .day-head .count{margin:0;flex:none}
   .day-sec{margin-top:14px;border-top:1px dashed var(--line);padding-top:11px}
   .day-sec h4{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
@@ -1570,21 +1575,20 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
       alvo.appendChild(fd);
     }
 
-    var lista=diasTodos().filter(apareceNoFiltro);
+    var lista=diasTodos();
+    lista.forEach(function(a){ a.vago = filtro ? !apareceNoFiltro(a) : false; });
     if(filtro){
+      var comEla=lista.filter(function(a){ return !a.vago; }).length;
+      var livres=lista.length-comEla;
       var res=document.createElement('p'); res.className='count';
-      res.textContent=lista.length+(lista.length===1?' dia com ':' dias com ')+nomeDe(filtro);
+      res.textContent=comEla+(comEla===1?' dia marcado':' dias marcados')+' · '+
+                      livres+(livres===1?' dia livre':' dias livres')+' pra '+nomeDe(filtro);
       alvo.appendChild(res);
-    }
-    if(!lista.length){
-      var vz=document.createElement('p'); vz.className='empty';
-      vz.textContent='Nada marcado pra '+(filtro?nomeDe(filtro):'ninguém')+' ainda.';
-      alvo.appendChild(vz); return;
     }
 
     lista.forEach(function(a){
       var aberto = !!abertos[a.id];
-      var card=document.createElement('div'); card.className='day '+a.tipo+(aberto?' open':'');
+      var card=document.createElement('div'); card.className='day '+a.tipo+(aberto?' open':'')+(a.vago?' vago':'');
       var ativos=participantes(a.id);
       var hora=dia(a.id).horario||'';
       var nProgs=progs(a.id).length;
@@ -1597,10 +1601,12 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
       if(nProgs) resumo+='<span class="day-hint">'+nProgs+(nProgs===1?' programação':' programações')+'</span>';
       head.innerHTML='<span class="day-date">'+dataCurta(a.d)+'</span>'+
         '<span class="day-t">'+esc(a.t)+'</span>'+resumo+
-        '<span class="count'+(eu&&ativos.indexOf(eu)>-1?' vou':'')+'">'+
-          (eu&&ativos.indexOf(eu)>-1
-             ? (ativos.length===1 ? 'só você' : 'você e mais '+(ativos.length-1))
-             : (ativos.length===0 ? 'ninguém ainda' : ativos.length+' de 15'))+'</span>'+
+        '<span class="count'+(a.vago?' livre':(eu&&ativos.indexOf(eu)>-1?' vou':''))+'">'+
+          (a.vago
+             ? 'livre pra '+nomeDe(filtro)
+             : (eu&&ativos.indexOf(eu)>-1
+                 ? (ativos.length===1 ? 'só você' : 'você e mais '+(ativos.length-1))
+                 : (ativos.length===0 ? 'ninguém ainda' : ativos.length+' de 15')))+'</span>'+
         '<span class="chev" aria-hidden="true">&#9662;</span>';
       head.addEventListener('click',function(){
         abertos[a.id] = !abertos[a.id];
@@ -1623,7 +1629,12 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
           var mapa={}; novoArr.forEach(function(id){ mapa[id]=true; });
           salvar('PUT','/dias/'+a.id+'/participantes',mapa);
         }));
-        if(eu && ativos.indexOf(eu)<0){
+        if(filtro && ativos.indexOf(filtro)<0){
+          var fBtn=document.createElement('button'); fBtn.type='button'; fBtn.className='eu-vou';
+          fBtn.textContent = (filtro===eu ? 'Eu vou' : 'Marcar '+nomeDe(filtro));
+          fBtn.addEventListener('click',function(){ salvar('PUT','/dias/'+a.id+'/participantes/'+filtro,true); });
+          s1.querySelector('.chosen').insertBefore(fBtn, s1.querySelector('.pill.add'));
+        } else if(!filtro && eu && ativos.indexOf(eu)<0){
           var euBtn=document.createElement('button'); euBtn.type='button'; euBtn.className='eu-vou';
           euBtn.textContent='Eu vou';
           euBtn.addEventListener('click',function(){ salvar('PUT','/dias/'+a.id+'/participantes/'+eu,true); });
