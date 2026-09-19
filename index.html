@@ -1494,21 +1494,21 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
   }
   function quemProg(pr){ var q=pr.quem||{}; return Object.keys(q).filter(function(k){return q[k];}); }
   function diasTodos(){
-    var lista=AGENDA.map(function(a){ return {d:a.d,t:a.t,sub:a.sub,tipo:a.tipo,fixo:true}; });
+    var lista=AGENDA.map(function(a){ return {id:a.d,d:a.d,t:a.t,sub:a.sub,tipo:a.tipo,fixo:true}; });
     var ex=remoto.extras||{};
     Object.keys(ex).forEach(function(k){
       var e=ex[k]||{};
       if(!e.d) return;
-      lista.push({d:e.d,t:e.t||'Sem título',sub:e.sub||'',tipo:'extra',fixo:false,key:k});
+      lista.push({id:'x'+k,d:e.d,t:e.t||'Sem título',sub:e.sub||'',tipo:'extra',fixo:false,key:k});
     });
     lista.sort(function(x,y){ return x.d<y.d?-1:(x.d>y.d?1:0); });
     return lista;
   }
   function apareceNoFiltro(a){
     if(!filtro) return true;
-    if(participantes(a.d).indexOf(filtro)>-1) return true;
+    if(participantes(a.id).indexOf(filtro)>-1) return true;
     var achou=false;
-    progs(a.d).forEach(function(pr){ if(quemProg(pr).indexOf(filtro)>-1) achou=true; });
+    progs(a.id).forEach(function(pr){ if(quemProg(pr).indexOf(filtro)>-1) achou=true; });
     return achou;
   }
 
@@ -1536,7 +1536,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     tudoBtn.textContent = algumAberto ? 'minimizar tudo' : 'expandir tudo';
     tudoBtn.addEventListener('click',function(){
       if(algumAberto){ abertos={}; }
-      else { diasTodos().forEach(function(a){ abertos[a.d]=true; }); }
+      else { diasTodos().forEach(function(a){ abertos[a.id]=true; }); }
       pintaAgenda();
     });
     barra.appendChild(tudoBtn);
@@ -1570,11 +1570,11 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     }
 
     lista.forEach(function(a){
-      var aberto = !!abertos[a.d];
+      var aberto = !!abertos[a.id];
       var card=document.createElement('div'); card.className='day '+a.tipo+(aberto?' open':'');
-      var ativos=participantes(a.d);
-      var hora=dia(a.d).horario||'';
-      var nProgs=progs(a.d).length;
+      var ativos=participantes(a.id);
+      var hora=dia(a.id).horario||'';
+      var nProgs=progs(a.id).length;
 
       var head=document.createElement('button');
       head.type='button'; head.className='day-head';
@@ -1590,7 +1590,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
              : (ativos.length===0 ? 'ninguém ainda' : ativos.length+' de 15'))+'</span>'+
         '<span class="chev" aria-hidden="true">&#9662;</span>';
       head.addEventListener('click',function(){
-        abertos[a.d] = !abertos[a.d];
+        abertos[a.id] = !abertos[a.id];
         pintaAgenda();
       });
       card.appendChild(head);
@@ -1600,27 +1600,27 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
         if(a.sub){ var sb=document.createElement('p'); sb.className='day-sub'; sb.textContent=a.sub; body.appendChild(sb); }
         if(a.tipo==='parque'){
           var hw=document.createElement('div'); hw.className='day-hours';
-          hw.innerHTML='<span>Abre e fecha</span><input type="text" maxlength="40" placeholder="ex.: 9h às 22h" value="'+esc(hora)+'" data-h="'+a.d+'">';
+          hw.innerHTML='<span>Abre e fecha</span><input type="text" maxlength="40" placeholder="ex.: 9h às 22h" value="'+esc(hora)+'" data-h="'+a.id+'">';
           body.appendChild(hw);
         }
 
         var s1=document.createElement('div'); s1.className='day-sec';
         s1.innerHTML='<h4>Quem vai</h4>';
-        s1.appendChild(seletor('dia:'+a.d,ativos,{},function(novoArr){
+        s1.appendChild(seletor('dia:'+a.id,ativos,{},function(novoArr){
           var mapa={}; novoArr.forEach(function(id){ mapa[id]=true; });
-          salvar('PUT','/dias/'+a.d+'/participantes',mapa);
+          salvar('PUT','/dias/'+a.id+'/participantes',mapa);
         }));
         if(eu && ativos.indexOf(eu)<0){
           var euBtn=document.createElement('button'); euBtn.type='button'; euBtn.className='eu-vou';
           euBtn.textContent='Eu vou';
-          euBtn.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/participantes/'+eu,true); });
+          euBtn.addEventListener('click',function(){ salvar('PUT','/dias/'+a.id+'/participantes/'+eu,true); });
           s1.querySelector('.chosen').insertBefore(euBtn, s1.querySelector('.pill.add'));
         }
         body.appendChild(s1);
 
         var s2=document.createElement('div'); s2.className='day-sec';
         s2.innerHTML='<h4>'+(a.tipo==='livre'?'Ideias e programações':'Programações do dia')+'</h4>';
-        var ps=progs(a.d);
+        var ps=progs(a.id);
         if(!ps.length){
           var nd=document.createElement('p'); nd.className='empty'; nd.textContent='Nada combinado ainda.';
           s2.appendChild(nd);
@@ -1631,17 +1631,17 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
           var bd=document.createElement('div'); bd.className='prog-b';
           bd.innerHTML='<span class="prog-t">'+esc(pr.t)+(pr.por?' <small>· '+esc(pr.por)+'</small>':'')+'</span>';
           var qs=quemProg(pr);
-          bd.appendChild(seletor('prog:'+a.d+':'+pr._k,qs,{},function(novoArr){
+          bd.appendChild(seletor('prog:'+a.id+':'+pr._k,qs,{},function(novoArr){
             var mapa={}; novoArr.forEach(function(id){ mapa[id]=true; });
-            salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem',mapa);
+            salvar('PUT','/dias/'+a.id+'/progs/'+pr._k+'/quem',mapa);
           }));
           if(eu && qs.indexOf(eu)<0){
             var eb=document.createElement('button'); eb.type='button'; eb.className='eu-vou'; eb.textContent='Eu vou';
-            eb.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem/'+eu,true); });
+            eb.addEventListener('click',function(){ salvar('PUT','/dias/'+a.id+'/progs/'+pr._k+'/quem/'+eu,true); });
             bd.querySelector('.chosen').insertBefore(eb, bd.querySelector('.pill.add'));
           }
           var xx=document.createElement('button'); xx.type='button'; xx.className='prog-x'; xx.textContent='remover';
-          xx.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.d+'/progs/'+pr._k); });
+          xx.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.id+'/progs/'+pr._k); });
           row.appendChild(hh); row.appendChild(bd); row.appendChild(xx);
           s2.appendChild(row);
         });
@@ -1655,7 +1655,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
           if(!tv) return;
           fp.querySelector('.hora').value=''; fp.querySelector('.texto').value='';
           var q={}; if(eu) q[eu]=true;
-          salvar('POST','/dias/'+a.d+'/progs',{h:hv,t:tv,por:eu?nomeDe(eu):'',quem:q,ts:Date.now()});
+          salvar('POST','/dias/'+a.id+'/progs',{h:hv,t:tv,por:eu?nomeDe(eu):'',quem:q,ts:Date.now()});
         });
         s2.appendChild(fp);
         body.appendChild(s2);
