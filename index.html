@@ -290,6 +290,22 @@
     border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
   .seats .free{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
   .seats .free.cheio{color:var(--coral)}
+  .chosen{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-size:.85rem;
+    font-weight:500;cursor:pointer;background:var(--teal);border:1px solid var(--teal);color:#fff;
+    padding:6px 10px 6px 12px;border-radius:999px}
+  .pill span{opacity:.65;font-size:1.1em;line-height:1}
+  .pill:hover{background:var(--coral);border-color:var(--coral)}
+  .pill:hover span{opacity:1}
+  .pill.add{background:none;border:1px dashed var(--line);color:var(--muted);padding:6px 13px}
+  .pill.add:hover{background:none;border-color:var(--teal);border-style:solid;color:var(--teal)}
+  .picker{margin-top:10px;padding:11px;border:1px solid var(--line);border-radius:10px;
+    background:var(--paper);display:flex;flex-wrap:wrap;gap:6px}
+  .opt{display:inline-flex;align-items:baseline;gap:6px;font-family:var(--body);font-size:.83rem;
+    cursor:pointer;background:var(--surface);border:1px solid var(--line);color:var(--ink);
+    padding:6px 11px;border-radius:999px}
+  .opt:hover{border-color:var(--teal);color:var(--teal)}
+  .opt small{font-family:var(--mono);font-size:.6rem;letter-spacing:.04em;color:var(--muted)}
   .rest-by{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;color:var(--muted);margin-top:8px;display:block}
   .del{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;
     font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;padding:4px 9px;cursor:pointer;margin-top:10px}
@@ -1465,11 +1481,63 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     });
   }
 
+  var pickerAberto=null;
+  function mapaOnde(tipo,lista){
+    var m={};
+    lista.forEach(function(it){
+      ocupantesDe(tipo,it.id,it.ocupantes).forEach(function(pid){ m[pid]=it.nome; });
+    });
+    return m;
+  }
+  function seletor(chave,ocupantes,onde,onSalvar){
+    var box=document.createElement('div');
+    var linha=document.createElement('div'); linha.className='chosen';
+    ocupantes.forEach(function(pid){
+      var b=document.createElement('button'); b.type='button'; b.className='pill';
+      b.innerHTML=esc(nomeDe(pid))+'<span aria-hidden="true">&times;</span>';
+      b.title='Tirar '+nomeDe(pid);
+      b.addEventListener('click',function(){
+        onSalvar(ocupantes.filter(function(x){return x!==pid;}));
+      });
+      linha.appendChild(b);
+    });
+    if(!ocupantes.length){
+      var vazio=document.createElement('span'); vazio.className='empty'; vazio.textContent='Ninguém ainda. ';
+      linha.appendChild(vazio);
+    }
+    var add=document.createElement('button'); add.type='button'; add.className='pill add';
+    add.textContent = pickerAberto===chave ? 'fechar' : '+ pessoa';
+    add.addEventListener('click',function(){
+      pickerAberto = (pickerAberto===chave) ? null : chave;
+      pinta();
+    });
+    linha.appendChild(add);
+    box.appendChild(linha);
+
+    if(pickerAberto===chave){
+      var pick=document.createElement('div'); pick.className='picker';
+      var restam=PESSOAS.filter(function(p){ return ocupantes.indexOf(p.id)<0; });
+      if(!restam.length){ pick.innerHTML='<span class="empty">Todo mundo já está aqui.</span>'; }
+      restam.forEach(function(p){
+        var o=document.createElement('button'); o.type='button'; o.className='opt';
+        o.innerHTML=esc(p.nome)+(onde[p.id]?'<small>'+esc(onde[p.id])+'</small>':'');
+        o.addEventListener('click',function(){
+          pickerAberto=null;
+          onSalvar(ocupantes.concat([p.id]));
+        });
+        pick.appendChild(o);
+      });
+      box.appendChild(pick);
+    }
+    return box;
+  }
+
   /* ---------- carros ---------- */
   function pintaCarros(){
     var alvo=document.getElementById('carros'); if(!alvo) return;
     if(digitando(alvo)) return;
     alvo.innerHTML='';
+    var ondeC=mapaOnde('carros',CARROS);
     CARROS.forEach(function(c){
       var oc=ocupantesDe('carros',c.id,c.ocupantes), lug=lugaresDe(c.id,c.lugares);
       var extra = c.id==='c1' ? 1 : 0;              // bebê conforto
@@ -1477,8 +1545,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
       var card=document.createElement('div'); card.className='card';
       card.innerHTML='<h3>'+esc(c.nome)+'</h3>'+
         (c.obs?'<p class="desc">'+esc(c.obs)+'</p>':'');
-      card.appendChild(chips(oc,function(id,ligar){
-        var novo=oc.slice(); if(ligar) novo.push(id); else novo.splice(novo.indexOf(id),1);
+      card.appendChild(seletor('carro:'+c.id,oc,ondeC,function(novo){
         salvar('PUT','/carros/'+c.id+'/ocupantes',novo);
       }));
       var s=document.createElement('div'); s.className='seats';
@@ -1501,6 +1568,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     var alvo=document.getElementById('quartos'); if(!alvo) return;
     if(digitando(alvo)) return;
     alvo.innerHTML='';
+    var ondeQ=mapaOnde('quartos',QUARTOS);
     QUARTOS.forEach(function(q){
       var oc=ocupantesDe('quartos',q.id,q.ocupantes);
       var card=document.createElement('div'); card.className='card';
@@ -1508,8 +1576,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
         '<p class="desc">'+esc(q.cama)+'</p>'+
         '<p class="desc'+(q.compart?' warn':'')+'">'+esc(q.banho)+'</p>'+
         (q.obs?'<p class="desc">'+esc(q.obs)+'</p>':'');
-      card.appendChild(chips(oc,function(id,ligar){
-        var novo=oc.slice(); if(ligar) novo.push(id); else novo.splice(novo.indexOf(id),1);
+      card.appendChild(seletor('quarto:'+q.id,oc,ondeQ,function(novo){
         salvar('PUT','/quartos/'+q.id+'/ocupantes',novo);
       }));
       alvo.appendChild(card);
