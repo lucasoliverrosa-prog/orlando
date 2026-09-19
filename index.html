@@ -216,6 +216,26 @@
   .apptop-brand{display:none;font-family:var(--display);font-weight:800;font-size:1.05rem;letter-spacing:-.02em}
   .apptop-brand b{font-family:var(--mono);font-size:.6rem;font-weight:400;letter-spacing:.08em;
     color:var(--muted);display:block;margin-top:1px}
+  .apptop-bin{display:inline-flex;align-items:center;gap:6px;margin-left:auto;
+    background:none;border:1px solid var(--line);border-radius:999px;padding:6px 11px;
+    cursor:pointer;color:var(--coral);font-family:var(--mono);font-size:.7rem}
+  .apptop-bin svg{width:14px;height:14px}
+  .apptop-bin:hover{border-color:var(--coral)}
+  .apptop-bin + .apptop-who{margin-left:14px}
+  .com-btn{display:inline-flex;align-items:center;gap:6px;margin-top:11px;background:none;
+    border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer;
+    font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;color:var(--muted)}
+  .com-btn svg{width:13px;height:13px}
+  .com-btn:hover{border-color:var(--teal);color:var(--teal)}
+  .com-btn.tem{color:var(--teal);border-color:var(--teal)}
+  .lx-meta{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--muted);
+    display:block;margin:0 0 10px}
+  .lx-acoes{display:flex;gap:8px;flex-wrap:wrap}
+  .lx-acoes button{font-family:var(--mono);font-size:.64rem;letter-spacing:.07em;text-transform:uppercase;
+    border-radius:8px;padding:7px 13px;cursor:pointer}
+  .lx-voltar{background:var(--teal);border:1px solid var(--teal);color:#fff}
+  .lx-sumir{background:none;border:1px dashed var(--line);color:var(--muted)}
+  .lx-sumir:hover{border-color:var(--coral);border-style:solid;color:var(--coral)}
   .apptop-who{display:flex;align-items:center;gap:8px;margin-left:auto}
   .apptop-who label{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
     text-transform:uppercase;color:var(--muted);white-space:nowrap}
@@ -515,6 +535,10 @@
 
 <header class="apptop">
   <span class="apptop-brand">Orlando <b>22 set – 6 out</b></span>
+  <button class="apptop-bin" id="binBtn" type="button" hidden title="Lixeira">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
+    <span id="binN">0</span>
+  </button>
   <div class="apptop-who">
     <label for="whoAmI">Você é</label>
     <select id="whoAmI"><option value="">escolha seu nome</option></select>
@@ -561,6 +585,15 @@
       <button class="nav-btn" type="submit">Adicionar</button>
     </form>
     <div id="restLista" class="cards"></div>
+  </div>
+</section>
+
+<section class="view" id="v-lixeira">
+  <div class="wrap viewpad">
+    <p class="eyebrow">Nada se perde</p>
+    <h2 class="view-h">Lixeira</h2>
+    <p class="section-note">Tudo que alguém apagou fica guardado aqui, com o nome de quem apagou. Dá pra restaurar no lugar de origem ou apagar de vez. Comentários não entram — esses somem na hora.</p>
+    <div id="lixeira" class="cards"></div>
   </div>
 </section>
 
@@ -1485,6 +1518,25 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
       .catch(function(){ aviso('não salvou — sem conexão com o canal',true); });
   }
 
+  /* ---------- lixeira ---------- */
+  function paraLixeira(caminho,dados,rotulo,tipo){
+    if(!dados){ return salvar('DELETE',caminho); }
+    aviso('salvando…');
+    return req('POST','/lixeira',{caminho:caminho,dados:dados,rotulo:rotulo,tipo:tipo,
+                                  por:eu?nomeDe(eu):'',ts:Date.now()})
+      .then(function(){ return req('DELETE',caminho); })
+      .then(function(){ aviso('mandado pra lixeira'); return puxar(); })
+      .catch(function(){ aviso('não deu pra apagar — sem conexão',true); });
+  }
+  function restaurar(k){
+    var it=(remoto.lixeira||{})[k]; if(!it) return;
+    aviso('restaurando…');
+    return req('PUT',it.caminho,it.dados)
+      .then(function(){ return req('DELETE','/lixeira/'+k); })
+      .then(function(){ aviso('de volta no lugar'); return puxar(); })
+      .catch(function(){ aviso('não deu pra restaurar',true); });
+  }
+
   /* ---------- helpers de estado ---------- */
   function dia(d){ return (remoto.dias && remoto.dias[d]) || {}; }
   function participantes(d){ var p=dia(d).participantes||{}; return Object.keys(p).filter(function(k){return p[k];}); }
@@ -1696,7 +1748,11 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
             bd.querySelector('.chosen').insertBefore(eb, bd.querySelector('.pill.add'));
           }
           var xx=document.createElement('button'); xx.type='button'; xx.className='prog-x'; xx.textContent='remover';
-          xx.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.id+'/progs/'+pr._k); });
+          xx.addEventListener('click',function(){
+            var copia={}; for(var kk in pr){ if(kk!=='_k') copia[kk]=pr[kk]; }
+            paraLixeira('/dias/'+a.id+'/progs/'+pr._k, copia,
+                        'Programação: '+(pr.t||'')+' · '+dataCurta(a.d), 'programação');
+          });
           row.appendChild(hh); row.appendChild(bd); row.appendChild(xx);
           s2.appendChild(row);
         });
@@ -1717,7 +1773,10 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
 
         if(!a.fixo){
           var rmD=document.createElement('button'); rmD.type='button'; rmD.className='prog-x'; rmD.textContent='apagar este dia';
-          rmD.addEventListener('click',function(){ salvar('DELETE','/extras/'+a.key); });
+          rmD.addEventListener('click',function(){
+            paraLixeira('/extras/'+a.key, (remoto.extras||{})[a.key],
+                        'Dia: '+a.t+' · '+dataCurta(a.d), 'dia');
+          });
           body.appendChild(rmD);
         }
         card.appendChild(body);
@@ -1849,6 +1908,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
   }
 
   /* ---------- restaurantes ---------- */
+  var comsAbertos={};
   function pintaRest(){
     var alvo=document.getElementById('restLista'); if(!alvo) return;
     if(digitando(alvo)) return;
@@ -1862,42 +1922,92 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
       card.innerHTML='<h3>'+esc(it.nome)+'</h3>'+(it.obs?'<p class="desc">'+esc(it.obs)+'</p>':'')+
         '<span class="rest-by">sugestão de '+esc(it.por||'alguém')+'</span>';
 
-      var coms=it.comentarios||{};
-      var cks=Object.keys(coms).sort(function(x,y){ return (coms[x].ts||0)-(coms[y].ts||0); });
-      var box=document.createElement('div'); box.className='coms';
-      cks.forEach(function(ck){
-        var cm=coms[ck]||{};
-        var row=document.createElement('p'); row.className='com';
-        row.innerHTML='<b>'+esc(cm.por||'alguém')+'</b><span>'+esc(cm.t)+'</span>';
-        var cx=document.createElement('button'); cx.type='button'; cx.innerHTML='&times;';
-        cx.title='Apagar comentário';
-        cx.addEventListener('click',function(){ salvar('DELETE','/restaurantes/'+k+'/comentarios/'+ck); });
-        row.appendChild(cx); box.appendChild(row);
-      });
-      var cf=document.createElement('form'); cf.className='comform';
-      cf.innerHTML='<input type="text" maxlength="140" placeholder="Comentar" required>'+
-        '<button type="submit">enviar</button>';
-      cf.addEventListener('submit',function(e){
-        e.preventDefault();
-        var v=cf.querySelector('input').value.trim(); if(!v) return;
-        cf.querySelector('input').value='';
-        salvar('POST','/restaurantes/'+k+'/comentarios',{t:v,por:eu?nomeDe(eu):'',ts:Date.now()});
-      });
-      box.appendChild(cf);
-      card.appendChild(box);
       var x=document.createElement('button'); x.className='card-x'; x.type='button';
-      x.innerHTML='&times;'; x.title='Remover sugestão'; x.setAttribute('aria-label','Remover '+(it.nome||'sugestão'));
-      x.addEventListener('click',function(){ salvar('DELETE','/restaurantes/'+k); });
+      x.innerHTML='&times;'; x.title='Mandar pra lixeira';
+      x.setAttribute('aria-label','Apagar '+(it.nome||'sugestão'));
+      x.addEventListener('click',function(){
+        paraLixeira('/restaurantes/'+k, it, 'Restaurante: '+(it.nome||''), 'restaurante');
+      });
       card.appendChild(x);
+
+      var coms=it.comentarios||{};
+      var cks=Object.keys(coms).sort(function(a2,b2){ return (coms[a2].ts||0)-(coms[b2].ts||0); });
+      var aberto=!!comsAbertos[k];
+
+      var tog=document.createElement('button'); tog.type='button';
+      tog.className='com-btn'+(cks.length?' tem':'');
+      tog.setAttribute('aria-expanded', aberto?'true':'false');
+      tog.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '+
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+
+        '<path d="M21 11.5a8 8 0 01-8 8H8l-5 3 1-4.5a8 8 0 0117-6.5z"/></svg>'+
+        (cks.length ? cks.length+(cks.length===1?' comentário':' comentários') : 'comentar');
+      tog.addEventListener('click',function(){ comsAbertos[k]=!comsAbertos[k]; pintaRest(); });
+      card.appendChild(tog);
+
+      if(aberto){
+        var box=document.createElement('div'); box.className='coms';
+        cks.forEach(function(ck){
+          var cm=coms[ck]||{};
+          var row=document.createElement('p'); row.className='com';
+          row.innerHTML='<b>'+esc(cm.por||'alguém')+'</b><span>'+esc(cm.t)+'</span>';
+          var cx=document.createElement('button'); cx.type='button'; cx.innerHTML='&times;';
+          cx.title='Apagar comentário';
+          cx.addEventListener('click',function(){ salvar('DELETE','/restaurantes/'+k+'/comentarios/'+ck); });
+          row.appendChild(cx); box.appendChild(row);
+        });
+        var cf=document.createElement('form'); cf.className='comform';
+        cf.innerHTML='<input type="text" maxlength="140" placeholder="Comentar" required>'+
+          '<button type="submit">enviar</button>';
+        cf.addEventListener('submit',function(e){
+          e.preventDefault();
+          var v=cf.querySelector('input').value.trim(); if(!v) return;
+          cf.querySelector('input').value='';
+          salvar('POST','/restaurantes/'+k+'/comentarios',{t:v,por:eu?nomeDe(eu):'',ts:Date.now()});
+        });
+        box.appendChild(cf);
+        card.appendChild(box);
+      }
+
       alvo.appendChild(card);
     });
   }
 
+  function pintaLixeira(){
+    var alvo=document.getElementById('lixeira'); if(!alvo) return;
+    alvo.innerHTML='';
+    var lx=remoto.lixeira||{}, ks=Object.keys(lx);
+    if(!ks.length){ alvo.innerHTML='<p class="empty">Lixeira vazia. Nada foi apagado.</p>'; return; }
+    ks.sort(function(x,y){ return (lx[y].ts||0)-(lx[x].ts||0); });
+    ks.forEach(function(k){
+      var it=lx[k]||{};
+      var quando=it.ts?new Date(it.ts).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+      var card=document.createElement('div'); card.className='card';
+      card.innerHTML='<p class="meta">'+esc(it.tipo||'item')+'</p><h3>'+esc(it.rotulo||'(sem nome)')+'</h3>'+
+        '<span class="lx-meta">apagado por '+esc(it.por||'alguém')+(quando?' · '+quando:'')+'</span>';
+      var acoes=document.createElement('div'); acoes.className='lx-acoes';
+      var v=document.createElement('button'); v.type='button'; v.className='lx-voltar'; v.textContent='Restaurar';
+      v.addEventListener('click',function(){ restaurar(k); });
+      var d=document.createElement('button'); d.type='button'; d.className='lx-sumir'; d.textContent='Apagar de vez';
+      d.addEventListener('click',function(){ salvar('DELETE','/lixeira/'+k); });
+      acoes.appendChild(v); acoes.appendChild(d);
+      card.appendChild(acoes);
+      alvo.appendChild(card);
+    });
+  }
+  function pintaBin(){
+    var b=document.getElementById('binBtn'), n=Object.keys(remoto.lixeira||{}).length;
+    if(!b) return;
+    b.hidden = n===0;
+    document.getElementById('binN').textContent = n;
+  }
+
   function pinta(){
+    pintaBin();
     if(viewAtual==='cronograma') pintaAgenda();
     else if(viewAtual==='carros') pintaCarros();
     else if(viewAtual==='quartos') pintaQuartos();
     else if(viewAtual==='restaurantes') pintaRest();
+    else if(viewAtual==='lixeira') pintaLixeira();
   }
 
   /* ---------- navegação ---------- */
@@ -1919,6 +2029,9 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     if(timer) clearInterval(timer);
     if(BASE && v!=='reuniao' && v!=='trava'){ puxar(); timer=setInterval(puxar,6000); }
   }
+  document.getElementById('binBtn').addEventListener('click',function(){
+    location.hash='lixeira'; mostra('lixeira');
+  });
   links.forEach(function(l){
     l.addEventListener('click',function(){
       var v=l.getAttribute('data-view');
@@ -1973,11 +2086,11 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
   /* ---------- início ---------- */
   aplicaLiberacao();
   var inicial=(location.hash||'').replace('#','');
-  if(['cronograma','carros','quartos','restaurantes','reuniao'].indexOf(inicial)<0) inicial='cronograma';
+  if(['cronograma','carros','quartos','restaurantes','lixeira','reuniao'].indexOf(inicial)<0) inicial='cronograma';
   mostra(inicial);
   window.addEventListener('hashchange',function(){
     var v=(location.hash||'').replace('#','');
-    if(['cronograma','carros','quartos','restaurantes','reuniao'].indexOf(v)>-1 && v!==viewAtual) mostra(v);
+    if(['cronograma','carros','quartos','restaurantes','lixeira','reuniao'].indexOf(v)>-1 && v!==viewAtual) mostra(v);
   });
   document.addEventListener('visibilitychange',function(){ if(!document.hidden) puxar(); });
 })();
