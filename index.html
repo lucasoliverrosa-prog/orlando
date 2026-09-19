@@ -240,7 +240,17 @@
 
   /* ---------- cronograma ---------- */
   .agenda{display:grid;gap:12px}
-  .day{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .day{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .day-head{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;
+    border:none;cursor:pointer;padding:15px 18px;font:inherit;color:inherit;flex-wrap:wrap}
+  .day-head:hover{background:var(--surface-2)}
+  .day-body{padding:0 18px 16px}
+  .day-hint{font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:var(--muted);flex:none}
+  .chev{margin-left:auto;flex:none;color:var(--muted);font-size:.8rem;line-height:1;
+    transition:transform .18s}
+  .day.open .chev{transform:rotate(180deg)}
+  .count.vou{color:var(--teal)}
+  .day-body .day-sub{margin:0 0 4px}
   .day.livre{border-left:4px solid var(--sun)}
   .day.viagem{border-left:4px solid var(--muted)}
   .day.parque{border-left:4px solid var(--teal)}
@@ -302,7 +312,7 @@
   .crono-bar select{font-family:var(--body);font-size:.88rem;padding:7px 10px;border-radius:8px;
     border:1px solid var(--line);background:var(--surface);color:var(--ink)}
   .day.extra{border-left:4px solid var(--coral)}
-  .day-top .count{margin:0;flex:none}
+  .day-head .count{margin:0;flex:none}
   .day-sec{margin-top:14px;border-top:1px dashed var(--line);padding-top:11px}
   .day-sec h4{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
     color:var(--muted);margin:0 0 8px;font-weight:400}
@@ -1466,7 +1476,7 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
   }
 
   /* ---------- cronograma ---------- */
-  var filtro=null, formDia=false;
+  var filtro=null, formDia=false, abertos={};
   var SEMANA=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
   function diaSemana(d){ return SEMANA[new Date(d+'T12:00:00').getDay()]; }
   function dataCurta(d){
@@ -1514,9 +1524,18 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     sel.addEventListener('change',function(){ filtro=sel.value||null; pintaAgenda(); });
     barra.appendChild(lab); barra.appendChild(sel);
     var novoBtn=document.createElement('button'); novoBtn.type='button'; novoBtn.className='pill add';
-    novoBtn.textContent = formDia ? 'fechar' : '+ dia';
+    novoBtn.textContent = formDia ? 'fechar' : '+ adicionar cronograma';
     novoBtn.addEventListener('click',function(){ formDia=!formDia; pintaAgenda(); });
     barra.appendChild(novoBtn);
+    var algumAberto = Object.keys(abertos).some(function(k){ return abertos[k]; });
+    var tudoBtn=document.createElement('button'); tudoBtn.type='button'; tudoBtn.className='pill add';
+    tudoBtn.textContent = algumAberto ? 'minimizar tudo' : 'expandir tudo';
+    tudoBtn.addEventListener('click',function(){
+      if(algumAberto){ abertos={}; }
+      else { diasTodos().forEach(function(a){ abertos[a.d]=true; }); }
+      pintaAgenda();
+    });
+    barra.appendChild(tudoBtn);
     alvo.appendChild(barra);
 
     if(formDia){
@@ -1547,78 +1566,103 @@ var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
     }
 
     lista.forEach(function(a){
-      var card=document.createElement('div'); card.className='day '+a.tipo;
+      var aberto = !!abertos[a.d];
+      var card=document.createElement('div'); card.className='day '+a.tipo+(aberto?' open':'');
       var ativos=participantes(a.d);
-      var h='<div class="day-top"><span class="day-date">'+dataCurta(a.d)+'</span>'+
-            '<span class="day-t">'+esc(a.t)+'</span>'+
-            '<span class="count">'+ativos.length+' de 15</span></div>';
-      if(a.sub) h+='<p class="day-sub">'+esc(a.sub)+'</p>';
-      if(a.tipo==='parque'){
-        h+='<div class="day-hours"><span>Abre e fecha</span><input type="text" maxlength="40" placeholder="ex.: 9h às 22h" value="'+esc(dia(a.d).horario||'')+'" data-h="'+a.d+'"></div>';
-      }
-      card.innerHTML=h;
+      var hora=dia(a.d).horario||'';
+      var nProgs=progs(a.d).length;
 
-      if(!a.fixo){
-        var rmD=document.createElement('button'); rmD.type='button'; rmD.className='prog-x'; rmD.textContent='apagar dia';
-        rmD.addEventListener('click',function(){ salvar('DELETE','/extras/'+a.key); });
-        card.querySelector('.day-top').appendChild(rmD);
-      }
+      var head=document.createElement('button');
+      head.type='button'; head.className='day-head';
+      head.setAttribute('aria-expanded', aberto?'true':'false');
+      var resumo='';
+      if(hora) resumo+='<span class="day-hint">'+esc(hora)+'</span>';
+      if(nProgs) resumo+='<span class="day-hint">'+nProgs+(nProgs===1?' programação':' programações')+'</span>';
+      head.innerHTML='<span class="day-date">'+dataCurta(a.d)+'</span>'+
+        '<span class="day-t">'+esc(a.t)+'</span>'+resumo+
+        '<span class="count'+(eu&&ativos.indexOf(eu)>-1?' vou':'')+'">'+
+          (eu&&ativos.indexOf(eu)>-1
+             ? (ativos.length===1 ? 'só você' : 'você e mais '+(ativos.length-1))
+             : (ativos.length===0 ? 'ninguém ainda' : ativos.length+' de 15'))+'</span>'+
+        '<span class="chev" aria-hidden="true">&#9662;</span>';
+      head.addEventListener('click',function(){
+        abertos[a.d] = !abertos[a.d];
+        pintaAgenda();
+      });
+      card.appendChild(head);
 
-      var s1=document.createElement('div'); s1.className='day-sec';
-      s1.innerHTML='<h4>Quem vai</h4>';
-      s1.appendChild(seletor('dia:'+a.d,ativos,{},function(novo){
-        var mapa={}; novo.forEach(function(id){ mapa[id]=true; });
-        salvar('PUT','/dias/'+a.d+'/participantes',mapa);
-      }));
-      if(eu && ativos.indexOf(eu)<0){
-        var euBtn=document.createElement('button'); euBtn.type='button'; euBtn.className='eu-vou';
-        euBtn.textContent='Eu vou';
-        euBtn.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/participantes/'+eu,true); });
-        s1.querySelector('.chosen').insertBefore(euBtn, s1.querySelector('.pill.add'));
-      }
-      card.appendChild(s1);
-
-      var s2=document.createElement('div'); s2.className='day-sec';
-      s2.innerHTML='<h4>'+(a.tipo==='livre'?'Ideias e programações':'Programações do dia')+'</h4>';
-      var ps=progs(a.d);
-      if(!ps.length){
-        var nd=document.createElement('p'); nd.className='empty'; nd.textContent='Nada combinado ainda.';
-        s2.appendChild(nd);
-      }
-      ps.forEach(function(pr){
-        var row=document.createElement('div'); row.className='prog';
-        var hh=document.createElement('span'); hh.className='prog-h'; hh.textContent=pr.h||'—';
-        var bd=document.createElement('div'); bd.className='prog-b';
-        bd.innerHTML='<span class="prog-t">'+esc(pr.t)+(pr.por?' <small>· '+esc(pr.por)+'</small>':'')+'</span>';
-        var qs=quemProg(pr);
-        bd.appendChild(seletor('prog:'+a.d+':'+pr._k,qs,{},function(novo){
-          var mapa={}; novo.forEach(function(id){ mapa[id]=true; });
-          salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem',mapa);
-        }));
-        if(eu && qs.indexOf(eu)<0){
-          var eb=document.createElement('button'); eb.type='button'; eb.className='eu-vou'; eb.textContent='Eu vou';
-          eb.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem/'+eu,true); });
-          bd.querySelector('.chosen').insertBefore(eb, bd.querySelector('.pill.add'));
+      if(aberto){
+        var body=document.createElement('div'); body.className='day-body';
+        if(a.sub){ var sb=document.createElement('p'); sb.className='day-sub'; sb.textContent=a.sub; body.appendChild(sb); }
+        if(a.tipo==='parque'){
+          var hw=document.createElement('div'); hw.className='day-hours';
+          hw.innerHTML='<span>Abre e fecha</span><input type="text" maxlength="40" placeholder="ex.: 9h às 22h" value="'+esc(hora)+'" data-h="'+a.d+'">';
+          body.appendChild(hw);
         }
-        var xx=document.createElement('button'); xx.type='button'; xx.className='prog-x'; xx.textContent='remover';
-        xx.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.d+'/progs/'+pr._k); });
-        row.appendChild(hh); row.appendChild(bd); row.appendChild(xx);
-        s2.appendChild(row);
-      });
-      var fp=document.createElement('form'); fp.className='miniform';
-      fp.innerHTML='<input type="text" class="hora" maxlength="8" placeholder="19h">'+
-        '<input type="text" class="texto" maxlength="70" placeholder="'+(a.tipo==='livre'?'Sua ideia pra esse dia':'Walmart, jantar, cinema…')+'" required>'+
-        '<button class="nav-btn" type="submit">Adicionar</button>';
-      fp.addEventListener('submit',function(e){
-        e.preventDefault();
-        var hv=fp.querySelector('.hora').value.trim(), tv=fp.querySelector('.texto').value.trim();
-        if(!tv) return;
-        fp.querySelector('.hora').value=''; fp.querySelector('.texto').value='';
-        var q={}; if(eu) q[eu]=true;
-        salvar('POST','/dias/'+a.d+'/progs',{h:hv,t:tv,por:eu?nomeDe(eu):'',quem:q,ts:Date.now()});
-      });
-      s2.appendChild(fp);
-      card.appendChild(s2);
+
+        var s1=document.createElement('div'); s1.className='day-sec';
+        s1.innerHTML='<h4>Quem vai</h4>';
+        s1.appendChild(seletor('dia:'+a.d,ativos,{},function(novoArr){
+          var mapa={}; novoArr.forEach(function(id){ mapa[id]=true; });
+          salvar('PUT','/dias/'+a.d+'/participantes',mapa);
+        }));
+        if(eu && ativos.indexOf(eu)<0){
+          var euBtn=document.createElement('button'); euBtn.type='button'; euBtn.className='eu-vou';
+          euBtn.textContent='Eu vou';
+          euBtn.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/participantes/'+eu,true); });
+          s1.querySelector('.chosen').insertBefore(euBtn, s1.querySelector('.pill.add'));
+        }
+        body.appendChild(s1);
+
+        var s2=document.createElement('div'); s2.className='day-sec';
+        s2.innerHTML='<h4>'+(a.tipo==='livre'?'Ideias e programações':'Programações do dia')+'</h4>';
+        var ps=progs(a.d);
+        if(!ps.length){
+          var nd=document.createElement('p'); nd.className='empty'; nd.textContent='Nada combinado ainda.';
+          s2.appendChild(nd);
+        }
+        ps.forEach(function(pr){
+          var row=document.createElement('div'); row.className='prog';
+          var hh=document.createElement('span'); hh.className='prog-h'; hh.textContent=pr.h||'—';
+          var bd=document.createElement('div'); bd.className='prog-b';
+          bd.innerHTML='<span class="prog-t">'+esc(pr.t)+(pr.por?' <small>· '+esc(pr.por)+'</small>':'')+'</span>';
+          var qs=quemProg(pr);
+          bd.appendChild(seletor('prog:'+a.d+':'+pr._k,qs,{},function(novoArr){
+            var mapa={}; novoArr.forEach(function(id){ mapa[id]=true; });
+            salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem',mapa);
+          }));
+          if(eu && qs.indexOf(eu)<0){
+            var eb=document.createElement('button'); eb.type='button'; eb.className='eu-vou'; eb.textContent='Eu vou';
+            eb.addEventListener('click',function(){ salvar('PUT','/dias/'+a.d+'/progs/'+pr._k+'/quem/'+eu,true); });
+            bd.querySelector('.chosen').insertBefore(eb, bd.querySelector('.pill.add'));
+          }
+          var xx=document.createElement('button'); xx.type='button'; xx.className='prog-x'; xx.textContent='remover';
+          xx.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.d+'/progs/'+pr._k); });
+          row.appendChild(hh); row.appendChild(bd); row.appendChild(xx);
+          s2.appendChild(row);
+        });
+        var fp=document.createElement('form'); fp.className='miniform';
+        fp.innerHTML='<input type="text" class="hora" maxlength="8" placeholder="19h">'+
+          '<input type="text" class="texto" maxlength="70" placeholder="'+(a.tipo==='livre'?'Sua ideia pra esse dia':'Walmart, jantar, cinema…')+'" required>'+
+          '<button class="nav-btn" type="submit">Adicionar</button>';
+        fp.addEventListener('submit',function(e){
+          e.preventDefault();
+          var hv=fp.querySelector('.hora').value.trim(), tv=fp.querySelector('.texto').value.trim();
+          if(!tv) return;
+          fp.querySelector('.hora').value=''; fp.querySelector('.texto').value='';
+          var q={}; if(eu) q[eu]=true;
+          salvar('POST','/dias/'+a.d+'/progs',{h:hv,t:tv,por:eu?nomeDe(eu):'',quem:q,ts:Date.now()});
+        });
+        s2.appendChild(fp);
+        body.appendChild(s2);
+
+        if(!a.fixo){
+          var rmD=document.createElement('button'); rmD.type='button'; rmD.className='prog-x'; rmD.textContent='apagar este dia';
+          rmD.addEventListener('click',function(){ salvar('DELETE','/extras/'+a.key); });
+          body.appendChild(rmD);
+        }
+        card.appendChild(body);
+      }
 
       alvo.appendChild(card);
     });
