@@ -156,8 +156,32 @@
     font-family:var(--mono);font-size:.75rem;letter-spacing:.04em;color:var(--muted)}
   footer p{margin:0 0 6px;max-width:var(--measure)}
 
-  .sec-img{margin:0 0 28px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:var(--surface-2)}
-  .sec-img img{display:block;width:100%;height:clamp(170px,30vw,320px);object-fit:cover}
+  .sec-head{display:flex;gap:clamp(14px,3vw,36px);align-items:flex-start;justify-content:space-between}
+  .sec-head-txt{flex:1;min-width:0}
+  .sec-img{flex:none;width:clamp(104px,16vw,176px);margin:6px 0 28px;
+    padding:7px 7px 9px;background:var(--surface);border:1px solid var(--line);border-radius:3px;
+    transform:rotate(-1.8deg);box-shadow:0 8px 20px -14px rgba(15,39,46,.55)}
+  .sec-img img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:2px}
+  @media (max-width:520px){ .sec-img{width:92px;margin-bottom:20px} }
+  .rule-row{display:flex;gap:clamp(12px,2vw,22px);align-items:flex-start;justify-content:space-between}
+  .rule-txt{flex:1;min-width:0}
+  .rule-img{flex:none;width:clamp(84px,11vw,128px);margin:2px 0 0;padding:6px 6px 8px;
+    background:var(--surface-2);border:1px solid var(--line);border-radius:3px;
+    transform:rotate(1.6deg);box-shadow:0 7px 18px -14px rgba(15,39,46,.55)}
+  .rule-img img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:2px}
+  @media (max-width:520px){ .rule-img{width:74px} }
+  .sub-h{font-family:var(--display);font-weight:700;font-size:clamp(1.15rem,2.4vw,1.5rem);
+    letter-spacing:-.015em;margin:34px 0 8px}
+  .qr-row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .qr{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 9px 7px}
+  .qr svg{display:block;width:84px;height:84px}
+  .qr span{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#0F272E}
+  .qr:hover{border-color:var(--teal)}
+  .s-qr{display:flex;gap:clamp(14px,2.4vw,28px);justify-content:center;flex-wrap:wrap}
+  .s-qr .qr{padding:clamp(10px,1.4vw,16px)}
+  .s-qr .qr svg{width:clamp(120px,15vw,210px);height:clamp(120px,15vw,210px)}
+  .s-qr .qr span{font-size:clamp(.6rem,.9vw,.8rem)}
 
   /* ---------- apresentação ---------- */
   .deck{position:fixed;inset:0;z-index:100;background:var(--paper);display:none;flex-direction:column;
@@ -251,7 +275,9 @@
   .sync-note b{color:var(--teal);font-weight:500}
   .sync-note.warn b{color:var(--coral)}
   body.follower .deckbar .nav-btn:not(.ghost),
-  body.follower .deckbar .count{display:none}
+  body.follower .deckbar .count,
+  body.follower #homeBtn{display:none}
+  #homeBtn{margin-left:auto}
   .tapzone{position:absolute;top:0;bottom:70px;width:20%;background:none;border:none;cursor:pointer;z-index:1}
   .tapzone.prev{left:0}
   .tapzone.next{right:0}
@@ -274,7 +300,9 @@
       <a class="nav-chip" href="#guias">Guias</a>
       <a class="nav-chip" href="#mochila">Mochila</a>
       <a class="nav-chip" href="#apps">Apps</a>
+      <a class="nav-chip" href="#educacao">Educação</a>
       <a class="nav-chip" href="#glossario">Glossário</a>
+      <a class="nav-chip" href="#descanso">Descanso</a>
     </nav>
     <button class="bar-btn" id="tvBtn" type="button" aria-pressed="false">Modo TV</button>
     <button class="bar-btn primary" id="presentBtn" type="button">Apresentar</button>
@@ -320,11 +348,12 @@
     </div>
   </section>
 
-  <section id="casa" data-img="img/fita.jpg">
-    <p class="eyebrow">Convivência</p>
+  <section id="casa">
+    <div class="sec-head">
+      <div class="sec-head-txt"><p class="eyebrow">Convivência</p>
     <h2>A casa</h2>
-    <p class="section-note">Espaço compartilhado tem uma lógica só: sempre tem alguém depois de você.</p>
-    <figure class="sec-img"><img src="img/fita.jpg" alt="Rolos de fita crepe — a fita que marca o que é de quem na geladeira" loading="lazy"></figure>
+    <p class="section-note">Espaço compartilhado tem uma lógica só: sempre tem alguém depois de você.</p></div>
+    </div>
     <ul class="rules">
       <li>
         <span class="rule-t">Cozinha: sujou, lavou<span class="dot">.</span></span>
@@ -335,16 +364,7 @@
         <p>Ninguém é obrigado a manter o quarto arrumado — é seu, faça o que quiser. Mas área comum é de todo mundo: sala, cozinha, varanda e banheiro social ficam limpos.</p>
         <p>Regra prática: se você levou pra sala, você leva de volta.</p>
       </li>
-      <li>
-        <span class="rule-t">Geladeira: fita branca e canetão<span class="dot">.</span></span>
-        <p>Comprei fita e canetão e eles ficam na cozinha. <em>Escreveu o nome = é seu, ninguém pega.</em> <em>Sem nome = é livre, pode pegar.</em></p>
-        <p>Não quer dividir e não é perecível? Guarda no quarto e resolve o problema na origem.</p>
-      </li>
     </ul>
-    <div class="callout">
-      <span class="k">Por que a fita existe</span>
-      <p><strong>Usar a fita não é ser chato, é ser claro.</strong> Ela evita a conversa constrangedora de "cadê meu iogurte" antes dela acontecer.</p>
-    </div>
   </section>
 
   <section id="comida">
@@ -356,22 +376,33 @@
         <span class="rule-t">Compre o seu, do seu jeito<span class="dot">.</span></span>
         <p>Sem vaquinha de mercado, sem rateio de café da manhã. Quem quiser combinar uma refeição em conjunto, combina — mas é exceção, não o padrão.</p>
       </li>
+      <li data-img="img/fita.jpg">
+        <div class="rule-row"><div class="rule-txt"><span class="rule-t">Geladeira: fita branca e canetão<span class="dot">.</span></span>
+        <p>Comprei fita e canetão e eles ficam na cozinha. <em>Escreveu o nome = é seu, ninguém pega.</em> <em>Sem nome = é livre, pode pegar.</em></p>
+        <p>Não quer dividir e não é perecível? Guarda no quarto e resolve o problema na origem.</p></div><figure class="rule-img"><img src="img/fita.jpg" alt="Fita crepe e canetão para marcar comida na geladeira" loading="lazy"></figure></div>
+      </li>
       <li>
-        <span class="rule-t">Lanche e água do parque saem do mercado<span class="dot">.</span></span>
-        <p>Comprar snack e garrafa antes economiza muito e salva o humor na fila. Deixe separado na noite anterior, junto com a mochila.</p>
+        <span class="rule-t">Lanche do parque sai do mercado<span class="dot">.</span></span>
+        <p>Comprar snack antes economiza muito e salva o humor na fila. Deixe separado na noite anterior, junto com a mochila.</p>
       </li>
       <li>
         <span class="rule-t">Espere ser oferecido<span class="dot">.</span></span>
         <p>Só porque você não se importa em dividir não significa que o outro pensa igual. <em>Ficar pedindo coisa que custa em dólar cansa.</em> Se a pessoa quiser oferecer, ela oferece — e aí é ótimo.</p>
       </li>
     </ul>
+    <div class="callout">
+      <span class="k">Por que a fita existe</span>
+      <p><strong>Usar a fita não é ser chato, é ser claro.</strong> Ela evita a conversa constrangedora de "cadê meu iogurte" antes dela acontecer.</p>
+    </div>
   </section>
 
   <section id="carros" data-img="img/carros.jpg">
-    <p class="eyebrow">Logística</p>
+    <div class="sec-head">
+      <div class="sec-head-txt"><p class="eyebrow">Logística</p>
     <h2>Carros e horários</h2>
-    <p class="section-note">São 4 carros. Isso é liberdade, não um comboio. Ninguém precisa sair junto nem voltar junto.</p>
-    <figure class="sec-img"><img src="img/carros.jpg" alt="Fila de carros na entrada do Magic Kingdom" loading="lazy"></figure>
+    <p class="section-note">São 4 carros. Isso é liberdade, não um comboio. Ninguém precisa sair junto nem voltar junto.</p></div>
+      <figure class="sec-img"><img src="img/carros.jpg" alt="Fila de carros na entrada do Magic Kingdom" loading="lazy"></figure>
+    </div>
     <ul class="rules">
       <li>
         <span class="rule-t">Combine com o seu grupo, avise no grupo grande<span class="dot">.</span></span>
@@ -388,33 +419,31 @@
     </ul>
     <div class="protocol">
       <h3>O aviso que resolve 90% dos problemas</h3>
-      <p class="msg">Galera, eu e a Ju vamos sair 8h pro Magic Kingdom, carro prata. Tem 3 lugares. Quem anima?</p>
+      <p class="msg">Galera, eu e a Josi vamos sair 8h pro Magic Kingdom, carro prata. Tem 3 lugares. Quem anima?</p>
       <p class="msg mine">Bora! Tô dentro.</p>
     </div>
   </section>
 
-  <section id="parques" data-img="img/chuva.jpg">
-    <p class="eyebrow">9 dias de parque</p>
+  <section id="parques">
+    <div class="sec-head">
+      <div class="sec-head-txt"><p class="eyebrow">9 dias de parque</p>
     <h2>Nos parques</h2>
-    <p class="section-note">Regra mãe: <strong>tempo é a única coisa que a gente não recupera</strong>. Fila a gente encara, mas hora perdida no estacionamento porque alguém esqueceu algo, não.</p>
-    <figure class="sec-img"><img src="img/chuva.jpg" alt="Chuva de fim de tarde na Main Street, todo mundo de capa" loading="lazy"></figure>
+    <p class="section-note">Regra mãe: <strong>tempo é a única coisa que a gente não recupera</strong>. Fila a gente encara, mas hora perdida no estacionamento porque alguém esqueceu algo, não.</p></div>
+    </div>
     <ul class="rules">
       <li>
-        <span class="rule-t">Água tem, sabor nem sempre<span class="dot">.</span></span>
-        <p>Todo parque dá copo de água de graça nas lanchonetes. Só que a água da Flórida tem um gosto característico que incomoda muita gente. Se isso é um problema pra você, leve a sua garrafa cheia de casa.</p>
+        <span class="rule-t">Água tem, sabor bom nem sempre<span class="dot">.</span></span>
+        <p>A água dos parques tem um gosto característico que incomoda muita gente, na Disney principalmente. Se isso é um problema pra você, saia de casa com a garrafinha já cheia.</p>
+        <p>De qualquer forma, <em>ninguém vai ficar sem água e ninguém precisa comprar</em>: na Disney você pede um copo nos balcões e nas lojas — a palavra mágica é <em>tap water</em> —, e na Universal dá pra encher na máquina de refrigerante. Com a garrafinha na mão você resolve nos dois.</p>
       </li>
       <li>
         <span class="rule-t">Assadura acaba com o seu dia<span class="dot">.</span></span>
         <p>São 12 horas andando, suando, com calor e umidade. <em>Se você tem perna grossa, não use short curto.</em> A pele atrita, assa, e depois você não consegue mais andar — e aí não tem parque que valha.</p>
         <p>Prefira short mais comprido, bermuda ciclista por baixo ou calça leve. E compre <em>pó antiassadura</em> na farmácia logo nos primeiros dias: passa antes de sair e previne. É barato e salva a viagem.</p>
       </li>
-      <li>
-        <span class="rule-t">Capa de chuva, sempre<span class="dot">.</span></span>
-        <p>Chove quase todo fim de tarde na Flórida — forte e rápido. Quem tem capa continua o dia, quem não tem compra a preço de parque ou vai embora encharcado.</p>
-      </li>
-      <li>
-        <span class="rule-t">Mochila pequena, sem exceção<span class="dot">.</span></span>
-        <p>Nas atrações radicais você é obrigado a guardar tudo no <em>locker</em>, e o armário é pequeno. Mochila grande não cabe, atrasa o grupo e vira dor de cabeça. Só leve mochilão se você já sabe que não vai em atração radical.</p>
+      <li data-img="img/chuva.jpg">
+        <div class="rule-row"><div class="rule-txt"><span class="rule-t">Capa de chuva, sempre<span class="dot">.</span></span>
+        <p>Chove quase todo fim de tarde na Flórida — forte e rápido. Quem tem capa continua o dia, quem não tem compra a preço de parque ou vai embora encharcado.</p></div><figure class="rule-img"><img src="img/chuva.jpg" alt="Chuva de fim de tarde num parque, gente de capa" loading="lazy"></figure></div>
       </li>
       <li>
         <span class="rule-t">Protetor solar de manhã e de novo à tarde<span class="dot">.</span></span>
@@ -443,8 +472,8 @@
 
   <section id="guias">
     <p class="eyebrow">Conversa franca</p>
-    <h2>Eu e a Josi não somos guias</h2>
-    <p class="section-note">A gente já esteve nos parques e vai ajudar com muito prazer — mas com um combinado.</p>
+    <h2>Ninguém é guia de ninguém</h2>
+    <p class="section-note">Eu e a Josi já estivemos nos parques e vamos ajudar com prazer. Mas cada adulto aqui é responsável por si — e isso vale pra todo mundo, não só pra gente.</p>
     <ul class="rules">
       <li>
         <span class="rule-t">A gente também está de férias<span class="dot">.</span></span>
@@ -458,18 +487,29 @@
         <span class="rule-t">Tente antes de perguntar<span class="dot">.</span></span>
         <p>Pedir comida em inglês, ler o mapa, pesquisar a atração: <em>isso faz parte do passeio</em>. Tente, erre, ria — e aí a gente ajuda no que travou de verdade.</p>
       </li>
-      <li>
-        <span class="rule-t">Pergunta boa a gente adora<span class="dot">.</span></span>
-        <p>"Essa atração dá enjoo?", "vale a pena de manhã ou à noite?" — isso é conhecimento que a gente tem e divide feliz. O que cansa é virar central de atendimento pra coisa que o app responde em 10 segundos.</p>
-      </li>
     </ul>
   </section>
 
-  <section id="mochila" data-img="img/locker.jpg">
-    <p class="eyebrow">Toda noite antes de dormir</p>
+  <section id="mochila">
+    <p class="eyebrow">Tamanho, tempo e conteúdo</p>
     <h2>A mochila do parque</h2>
-    <p class="section-note">Monte na véspera, não às 7h da manhã com o carro buzinando. Marque os itens conforme for colocando — a marcação fica salva no seu celular.</p>
-    <figure class="sec-img"><img src="img/locker.jpg" alt="Armários (lockers) na entrada de uma atração" loading="lazy"></figure>
+    <p class="section-note">Duas decisões: o que cabe no armário da atração, e o que você não pode esquecer em casa.</p>
+    <ul class="rules">
+      <li data-img="img/locker.jpg">
+        <div class="rule-row"><div class="rule-txt">
+        <span class="rule-t">Mochila pequena, de preferência<span class="dot">.</span></span>
+        <p>Nas atrações radicais você é obrigado a guardar tudo num <em>locker</em>, e o armário gratuito é estreito — uns 35 × 14 × 43 cm. Mochilão não entra, e aí trava a fila do grupo inteiro.</p>
+        <p>Se você já sabe que não vai em atração radical, leve a mochila que quiser. Fora isso, quanto menor, melhor pra todo mundo.</p>
+        </div><figure class="rule-img"><img src="img/locker.jpg" alt="Armários (lockers) na entrada de uma atração" loading="lazy"></figure></div>
+      </li>
+      <li>
+        <span class="rule-t">O locker é grátis, mas tem relógio<span class="dot">.</span></span>
+        <p>Na Universal o armário calcula sozinho o tempo da fila mais o da atração, com uma folga. Dentro disso não custa nada. <em>Passou do tempo, começa a cobrar</em> — cerca de US$ 3 a cada meia hora.</p>
+        <p>Então é guardou, andou, voltou e tirou. Não é lugar pra deixar coisa enquanto o grupo vai almoçar: pra isso existem os armários de dia inteiro, na entrada do parque, que são pagos desde o começo.</p>
+      </li>
+    </ul>
+    <h3 class="sub-h">O que vai dentro</h3>
+    <p class="section-note">Monte na véspera, não às 7h da manhã com o carro buzinando. Marque conforme for colocando — fica salvo no seu celular.</p>
     <ul class="check-grid" id="checklist">
       <li><label class="check"><input type="checkbox" id="ck-agua"><span><b>Garrafa de água cheia</b><small>Da geladeira de casa, não do parque</small></span></label></li>
       <li><label class="check"><input type="checkbox" id="ck-capa"><span><b>Capa de chuva</b><small>Sim, mesmo com sol de manhã</small></span></label></li>
@@ -492,11 +532,13 @@
         <span class="tag">Parques Disney</span>
         <h3>My Disney Experience</h3>
         <p>Ingresso, mapa, tempo de fila em tempo real, pedido de comida pelo celular e compra do Lightning Lane. É o app que você vai mais abrir.</p>
+        <div class="qr-row"><a class="qr" href="https://apps.apple.com/us/app/my-disney-experience/id547436543" rel="noopener"><svg viewBox="0 0 37 37" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 2h7v1h-7zM12 2h3v1h-3zM20 2h4v1h-4zM25 2h1v1h-1zM28 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h1v1h-1zM14 3h1v1h-1zM16 3h2v1h-2zM22 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM34 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM12 4h1v1h-1zM17 4h1v1h-1zM20 4h4v1h-4zM25 4h1v1h-1zM28 4h1v1h-1zM30 4h3v1h-3zM34 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h1v1h-1zM12 5h2v1h-2zM15 5h1v1h-1zM17 5h5v1h-5zM24 5h2v1h-2zM28 5h1v1h-1zM30 5h3v1h-3zM34 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM15 6h2v1h-2zM19 6h1v1h-1zM21 6h3v1h-3zM25 6h1v1h-1zM28 6h1v1h-1zM30 6h3v1h-3zM34 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h9v1h-9zM22 7h2v1h-2zM28 7h1v1h-1zM34 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h7v1h-7zM10 9h2v1h-2zM13 9h2v1h-2zM16 9h3v1h-3zM23 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM12 10h1v1h-1zM14 10h8v1h-8zM24 10h1v1h-1zM26 10h1v1h-1zM28 10h5v1h-5zM4 11h2v1h-2zM9 11h4v1h-4zM18 11h1v1h-1zM20 11h3v1h-3zM24 11h3v1h-3zM28 11h2v1h-2zM31 11h2v1h-2zM34 11h1v1h-1zM4 12h3v1h-3zM8 12h3v1h-3zM12 12h1v1h-1zM14 12h2v1h-2zM17 12h1v1h-1zM22 12h2v1h-2zM28 12h1v1h-1zM30 12h1v1h-1zM32 12h2v1h-2zM3 13h5v1h-5zM10 13h5v1h-5zM16 13h2v1h-2zM21 13h1v1h-1zM23 13h5v1h-5zM30 13h4v1h-4zM6 14h5v1h-5zM13 14h2v1h-2zM17 14h4v1h-4zM24 14h1v1h-1zM26 14h1v1h-1zM30 14h2v1h-2zM33 14h2v1h-2zM4 15h4v1h-4zM12 15h2v1h-2zM15 15h1v1h-1zM19 15h1v1h-1zM21 15h3v1h-3zM25 15h1v1h-1zM28 15h1v1h-1zM31 15h4v1h-4zM2 16h1v1h-1zM4 16h1v1h-1zM8 16h5v1h-5zM14 16h4v1h-4zM19 16h1v1h-1zM22 16h2v1h-2zM26 16h3v1h-3zM32 16h2v1h-2zM2 17h3v1h-3zM6 17h1v1h-1zM13 17h1v1h-1zM15 17h1v1h-1zM18 17h1v1h-1zM21 17h3v1h-3zM26 17h3v1h-3zM31 17h2v1h-2zM5 18h4v1h-4zM10 18h1v1h-1zM12 18h2v1h-2zM17 18h3v1h-3zM21 18h1v1h-1zM24 18h1v1h-1zM27 18h1v1h-1zM29 18h2v1h-2zM34 18h1v1h-1zM3 19h1v1h-1zM7 19h1v1h-1zM12 19h1v1h-1zM14 19h3v1h-3zM18 19h1v1h-1zM21 19h5v1h-5zM28 19h2v1h-2zM31 19h2v1h-2zM34 19h1v1h-1zM3 20h2v1h-2zM8 20h3v1h-3zM14 20h2v1h-2zM17 20h2v1h-2zM23 20h2v1h-2zM26 20h5v1h-5zM32 20h1v1h-1zM4 21h4v1h-4zM10 21h1v1h-1zM13 21h5v1h-5zM20 21h5v1h-5zM26 21h2v1h-2zM29 21h5v1h-5zM2 22h3v1h-3zM8 22h1v1h-1zM11 22h3v1h-3zM15 22h7v1h-7zM24 22h1v1h-1zM27 22h1v1h-1zM29 22h3v1h-3zM34 22h1v1h-1zM2 23h2v1h-2zM5 23h1v1h-1zM9 23h2v1h-2zM12 23h1v1h-1zM21 23h1v1h-1zM23 23h1v1h-1zM25 23h1v1h-1zM28 23h1v1h-1zM34 23h1v1h-1zM2 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM12 24h1v1h-1zM14 24h1v1h-1zM17 24h2v1h-2zM22 24h2v1h-2zM26 24h1v1h-1zM29 24h5v1h-5zM2 25h1v1h-1zM4 25h2v1h-2zM7 25h1v1h-1zM11 25h1v1h-1zM13 25h1v1h-1zM22 25h2v1h-2zM26 25h2v1h-2zM30 25h3v1h-3zM34 25h1v1h-1zM2 26h1v1h-1zM8 26h1v1h-1zM11 26h2v1h-2zM14 26h4v1h-4zM19 26h1v1h-1zM24 26h8v1h-8zM33 26h2v1h-2zM10 27h1v1h-1zM12 27h3v1h-3zM16 27h1v1h-1zM18 27h1v1h-1zM21 27h1v1h-1zM25 27h2v1h-2zM30 27h1v1h-1zM32 27h3v1h-3zM2 28h7v1h-7zM14 28h6v1h-6zM22 28h1v1h-1zM24 28h3v1h-3zM28 28h1v1h-1zM30 28h1v1h-1zM32 28h2v1h-2zM2 29h1v1h-1zM8 29h1v1h-1zM10 29h1v1h-1zM12 29h1v1h-1zM14 29h1v1h-1zM16 29h1v1h-1zM18 29h1v1h-1zM22 29h2v1h-2zM25 29h2v1h-2zM30 29h4v1h-4zM2 30h1v1h-1zM4 30h3v1h-3zM8 30h1v1h-1zM10 30h4v1h-4zM18 30h3v1h-3zM24 30h1v1h-1zM26 30h6v1h-6zM33 30h2v1h-2zM2 31h1v1h-1zM4 31h3v1h-3zM8 31h1v1h-1zM10 31h4v1h-4zM21 31h2v1h-2zM26 31h2v1h-2zM30 31h1v1h-1zM32 31h3v1h-3zM2 32h1v1h-1zM4 32h3v1h-3zM8 32h1v1h-1zM10 32h1v1h-1zM12 32h3v1h-3zM17 32h1v1h-1zM19 32h2v1h-2zM22 32h3v1h-3zM26 32h4v1h-4zM31 32h1v1h-1zM2 33h1v1h-1zM8 33h1v1h-1zM11 33h5v1h-5zM17 33h2v1h-2zM21 33h1v1h-1zM23 33h1v1h-1zM25 33h1v1h-1zM27 33h1v1h-1zM30 33h3v1h-3zM2 34h7v1h-7zM10 34h1v1h-1zM13 34h2v1h-2zM16 34h2v1h-2zM19 34h2v1h-2zM24 34h4v1h-4zM29 34h1v1h-1zM33 34h1v1h-1z" fill="#0F272E"/></svg><span>iPhone</span></a><a class="qr" href="https://play.google.com/store/apps/details?id=com.disney.wdw.android" rel="noopener"><svg viewBox="0 0 41 41" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 2h7v1h-7zM10 2h1v1h-1zM13 2h2v1h-2zM16 2h3v1h-3zM20 2h1v1h-1zM22 2h2v1h-2zM25 2h1v1h-1zM27 2h1v1h-1zM30 2h1v1h-1zM32 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM14 3h2v1h-2zM18 3h1v1h-1zM21 3h3v1h-3zM25 3h3v1h-3zM30 3h1v1h-1zM32 3h1v1h-1zM38 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM17 4h2v1h-2zM20 4h1v1h-1zM22 4h1v1h-1zM27 4h3v1h-3zM32 4h1v1h-1zM34 4h3v1h-3zM38 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM13 5h3v1h-3zM19 5h4v1h-4zM24 5h2v1h-2zM27 5h3v1h-3zM32 5h1v1h-1zM34 5h3v1h-3zM38 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM12 6h2v1h-2zM15 6h1v1h-1zM17 6h3v1h-3zM21 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM28 6h3v1h-3zM32 6h1v1h-1zM34 6h3v1h-3zM38 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM12 7h3v1h-3zM16 7h1v1h-1zM18 7h1v1h-1zM21 7h1v1h-1zM26 7h3v1h-3zM32 7h1v1h-1zM38 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h1v1h-1zM30 8h1v1h-1zM32 8h7v1h-7zM10 9h1v1h-1zM12 9h2v1h-2zM15 9h1v1h-1zM17 9h1v1h-1zM19 9h2v1h-2zM22 9h1v1h-1zM26 9h1v1h-1zM28 9h3v1h-3zM2 10h1v1h-1zM4 10h2v1h-2zM7 10h3v1h-3zM11 10h3v1h-3zM15 10h1v1h-1zM17 10h2v1h-2zM21 10h2v1h-2zM24 10h2v1h-2zM28 10h2v1h-2zM32 10h1v1h-1zM35 10h1v1h-1zM37 10h2v1h-2zM2 11h1v1h-1zM6 11h2v1h-2zM10 11h3v1h-3zM14 11h2v1h-2zM17 11h3v1h-3zM23 11h1v1h-1zM25 11h1v1h-1zM28 11h1v1h-1zM30 11h1v1h-1zM33 11h1v1h-1zM37 11h1v1h-1zM2 12h2v1h-2zM5 12h1v1h-1zM8 12h1v1h-1zM12 12h3v1h-3zM16 12h2v1h-2zM20 12h1v1h-1zM24 12h4v1h-4zM31 12h1v1h-1zM34 12h1v1h-1zM2 13h1v1h-1zM4 13h1v1h-1zM6 13h1v1h-1zM9 13h2v1h-2zM12 13h3v1h-3zM17 13h1v1h-1zM20 13h2v1h-2zM24 13h6v1h-6zM36 13h1v1h-1zM4 14h1v1h-1zM8 14h1v1h-1zM11 14h2v1h-2zM15 14h1v1h-1zM18 14h2v1h-2zM22 14h1v1h-1zM24 14h5v1h-5zM31 14h4v1h-4zM36 14h3v1h-3zM2 15h1v1h-1zM4 15h3v1h-3zM13 15h1v1h-1zM16 15h3v1h-3zM21 15h1v1h-1zM28 15h8v1h-8zM37 15h2v1h-2zM2 16h1v1h-1zM7 16h2v1h-2zM14 16h1v1h-1zM18 16h4v1h-4zM24 16h1v1h-1zM26 16h1v1h-1zM28 16h1v1h-1zM32 16h1v1h-1zM34 16h1v1h-1zM36 16h2v1h-2zM3 17h3v1h-3zM11 17h1v1h-1zM15 17h6v1h-6zM23 17h1v1h-1zM28 17h1v1h-1zM30 17h5v1h-5zM37 17h2v1h-2zM4 18h2v1h-2zM8 18h2v1h-2zM14 18h7v1h-7zM22 18h1v1h-1zM27 18h2v1h-2zM35 18h4v1h-4zM2 19h2v1h-2zM9 19h1v1h-1zM12 19h1v1h-1zM15 19h2v1h-2zM18 19h1v1h-1zM21 19h6v1h-6zM29 19h4v1h-4zM35 19h1v1h-1zM37 19h2v1h-2zM2 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM8 20h3v1h-3zM14 20h1v1h-1zM16 20h3v1h-3zM21 20h1v1h-1zM24 20h1v1h-1zM26 20h1v1h-1zM28 20h4v1h-4zM34 20h1v1h-1zM37 20h2v1h-2zM2 21h1v1h-1zM7 21h1v1h-1zM9 21h1v1h-1zM12 21h2v1h-2zM19 21h1v1h-1zM21 21h1v1h-1zM24 21h1v1h-1zM28 21h1v1h-1zM31 21h1v1h-1zM33 21h1v1h-1zM35 21h1v1h-1zM37 21h1v1h-1zM7 22h2v1h-2zM10 22h1v1h-1zM13 22h2v1h-2zM16 22h1v1h-1zM18 22h3v1h-3zM22 22h2v1h-2zM28 22h4v1h-4zM33 22h2v1h-2zM38 22h1v1h-1zM2 23h1v1h-1zM5 23h1v1h-1zM7 23h1v1h-1zM9 23h5v1h-5zM15 23h1v1h-1zM18 23h1v1h-1zM20 23h3v1h-3zM24 23h2v1h-2zM27 23h1v1h-1zM30 23h1v1h-1zM35 23h1v1h-1zM4 24h1v1h-1zM8 24h2v1h-2zM11 24h4v1h-4zM18 24h2v1h-2zM23 24h5v1h-5zM31 24h1v1h-1zM33 24h1v1h-1zM5 25h1v1h-1zM7 25h1v1h-1zM9 25h2v1h-2zM13 25h3v1h-3zM18 25h1v1h-1zM20 25h2v1h-2zM23 25h5v1h-5zM29 25h1v1h-1zM31 25h2v1h-2zM34 25h5v1h-5zM2 26h1v1h-1zM4 26h1v1h-1zM6 26h3v1h-3zM10 26h1v1h-1zM12 26h2v1h-2zM20 26h1v1h-1zM22 26h4v1h-4zM27 26h2v1h-2zM30 26h3v1h-3zM34 26h1v1h-1zM36 26h2v1h-2zM3 27h2v1h-2zM9 27h1v1h-1zM11 27h5v1h-5zM18 27h3v1h-3zM22 27h1v1h-1zM26 27h1v1h-1zM28 27h5v1h-5zM34 27h1v1h-1zM37 27h2v1h-2zM3 28h1v1h-1zM5 28h1v1h-1zM8 28h3v1h-3zM13 28h2v1h-2zM17 28h2v1h-2zM20 28h5v1h-5zM27 28h2v1h-2zM35 28h1v1h-1zM37 28h1v1h-1zM2 29h1v1h-1zM6 29h2v1h-2zM9 29h1v1h-1zM11 29h2v1h-2zM18 29h1v1h-1zM23 29h1v1h-1zM28 29h7v1h-7zM38 29h1v1h-1zM4 30h7v1h-7zM12 30h1v1h-1zM17 30h1v1h-1zM20 30h1v1h-1zM22 30h4v1h-4zM27 30h2v1h-2zM30 30h5v1h-5zM36 30h1v1h-1zM10 31h2v1h-2zM14 31h2v1h-2zM17 31h1v1h-1zM19 31h2v1h-2zM22 31h1v1h-1zM24 31h4v1h-4zM30 31h1v1h-1zM34 31h1v1h-1zM36 31h3v1h-3zM2 32h7v1h-7zM10 32h1v1h-1zM13 32h2v1h-2zM16 32h4v1h-4zM22 32h2v1h-2zM30 32h1v1h-1zM32 32h1v1h-1zM34 32h1v1h-1zM36 32h1v1h-1zM38 32h1v1h-1zM2 33h1v1h-1zM8 33h1v1h-1zM10 33h4v1h-4zM15 33h1v1h-1zM21 33h1v1h-1zM24 33h1v1h-1zM30 33h1v1h-1zM34 33h1v1h-1zM38 33h1v1h-1zM2 34h1v1h-1zM4 34h3v1h-3zM8 34h1v1h-1zM13 34h1v1h-1zM16 34h1v1h-1zM20 34h1v1h-1zM24 34h1v1h-1zM28 34h1v1h-1zM30 34h6v1h-6zM2 35h1v1h-1zM4 35h3v1h-3zM8 35h1v1h-1zM10 35h4v1h-4zM15 35h3v1h-3zM20 35h1v1h-1zM22 35h4v1h-4zM27 35h1v1h-1zM31 35h2v1h-2zM34 35h1v1h-1zM36 35h1v1h-1zM38 35h1v1h-1zM2 36h1v1h-1zM4 36h3v1h-3zM8 36h1v1h-1zM10 36h3v1h-3zM15 36h2v1h-2zM18 36h5v1h-5zM24 36h2v1h-2zM27 36h1v1h-1zM30 36h1v1h-1zM32 36h1v1h-1zM34 36h3v1h-3zM2 37h1v1h-1zM8 37h1v1h-1zM11 37h2v1h-2zM14 37h2v1h-2zM18 37h1v1h-1zM22 37h1v1h-1zM25 37h3v1h-3zM31 37h6v1h-6zM2 38h7v1h-7zM10 38h1v1h-1zM14 38h1v1h-1zM17 38h1v1h-1zM19 38h1v1h-1zM21 38h1v1h-1zM25 38h4v1h-4zM34 38h5v1h-5z" fill="#0F272E"/></svg><span>Android</span></a></div>
       </li>
       <li class="app">
         <span class="tag">Parques Universal</span>
         <h3>Universal Orlando Resort</h3>
         <p>Mesma ideia do lado da Universal: ingresso, mapa, filas, Express Pass e fila virtual das atrações mais concorridas.</p>
+        <div class="qr-row"><a class="qr" href="https://apps.apple.com/us/app/universal-orlando-resort/id878217080" rel="noopener"><svg viewBox="0 0 41 41" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 2h7v1h-7zM11 2h2v1h-2zM14 2h1v1h-1zM16 2h2v1h-2zM20 2h1v1h-1zM22 2h2v1h-2zM26 2h1v1h-1zM28 2h1v1h-1zM32 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM11 3h4v1h-4zM16 3h2v1h-2zM19 3h1v1h-1zM21 3h1v1h-1zM26 3h1v1h-1zM29 3h1v1h-1zM32 3h1v1h-1zM38 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM16 4h1v1h-1zM20 4h5v1h-5zM26 4h1v1h-1zM29 4h1v1h-1zM32 4h1v1h-1zM34 4h3v1h-3zM38 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h1v1h-1zM14 5h2v1h-2zM17 5h1v1h-1zM19 5h1v1h-1zM21 5h2v1h-2zM27 5h2v1h-2zM30 5h1v1h-1zM32 5h1v1h-1zM34 5h3v1h-3zM38 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h2v1h-2zM15 6h1v1h-1zM18 6h1v1h-1zM20 6h3v1h-3zM25 6h1v1h-1zM30 6h1v1h-1zM32 6h1v1h-1zM34 6h3v1h-3zM38 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM10 7h1v1h-1zM14 7h1v1h-1zM17 7h1v1h-1zM20 7h1v1h-1zM22 7h1v1h-1zM24 7h1v1h-1zM27 7h3v1h-3zM32 7h1v1h-1zM38 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h1v1h-1zM30 8h1v1h-1zM32 8h7v1h-7zM10 9h1v1h-1zM12 9h5v1h-5zM18 9h1v1h-1zM28 9h2v1h-2zM2 10h1v1h-1zM4 10h5v1h-5zM13 10h1v1h-1zM15 10h1v1h-1zM20 10h5v1h-5zM26 10h2v1h-2zM29 10h2v1h-2zM32 10h5v1h-5zM2 11h3v1h-3zM6 11h1v1h-1zM11 11h1v1h-1zM13 11h1v1h-1zM15 11h4v1h-4zM26 11h3v1h-3zM33 11h1v1h-1zM36 11h2v1h-2zM2 12h1v1h-1zM4 12h2v1h-2zM8 12h1v1h-1zM11 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM26 12h1v1h-1zM28 12h2v1h-2zM32 12h7v1h-7zM2 13h1v1h-1zM5 13h1v1h-1zM7 13h1v1h-1zM9 13h1v1h-1zM11 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM23 13h2v1h-2zM26 13h1v1h-1zM29 13h4v1h-4zM38 13h1v1h-1zM2 14h1v1h-1zM5 14h4v1h-4zM12 14h1v1h-1zM14 14h1v1h-1zM16 14h1v1h-1zM18 14h2v1h-2zM24 14h1v1h-1zM27 14h6v1h-6zM34 14h5v1h-5zM2 15h3v1h-3zM6 15h2v1h-2zM9 15h1v1h-1zM11 15h2v1h-2zM15 15h1v1h-1zM18 15h2v1h-2zM21 15h3v1h-3zM25 15h1v1h-1zM27 15h1v1h-1zM30 15h2v1h-2zM33 15h1v1h-1zM2 16h2v1h-2zM5 16h2v1h-2zM8 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM16 16h4v1h-4zM23 16h1v1h-1zM29 16h3v1h-3zM33 16h3v1h-3zM37 16h2v1h-2zM2 17h3v1h-3zM11 17h2v1h-2zM15 17h2v1h-2zM18 17h8v1h-8zM29 17h1v1h-1zM31 17h1v1h-1zM33 17h2v1h-2zM37 17h2v1h-2zM2 18h1v1h-1zM4 18h1v1h-1zM8 18h1v1h-1zM10 18h2v1h-2zM15 18h2v1h-2zM18 18h1v1h-1zM21 18h1v1h-1zM23 18h1v1h-1zM25 18h1v1h-1zM27 18h1v1h-1zM29 18h1v1h-1zM31 18h4v1h-4zM36 18h1v1h-1zM38 18h1v1h-1zM7 19h1v1h-1zM10 19h1v1h-1zM13 19h1v1h-1zM16 19h2v1h-2zM20 19h1v1h-1zM22 19h5v1h-5zM28 19h1v1h-1zM30 19h2v1h-2zM33 19h1v1h-1zM37 19h1v1h-1zM5 20h2v1h-2zM8 20h1v1h-1zM10 20h1v1h-1zM12 20h1v1h-1zM16 20h6v1h-6zM23 20h1v1h-1zM26 20h1v1h-1zM28 20h3v1h-3zM32 20h2v1h-2zM35 20h1v1h-1zM37 20h2v1h-2zM3 21h3v1h-3zM7 21h1v1h-1zM11 21h7v1h-7zM20 21h5v1h-5zM26 21h1v1h-1zM28 21h2v1h-2zM32 21h2v1h-2zM38 21h1v1h-1zM3 22h3v1h-3zM8 22h2v1h-2zM11 22h3v1h-3zM17 22h1v1h-1zM19 22h1v1h-1zM21 22h1v1h-1zM24 22h4v1h-4zM31 22h2v1h-2zM34 22h3v1h-3zM3 23h3v1h-3zM9 23h6v1h-6zM16 23h1v1h-1zM18 23h1v1h-1zM21 23h2v1h-2zM24 23h3v1h-3zM30 23h2v1h-2zM35 23h1v1h-1zM2 24h1v1h-1zM4 24h2v1h-2zM8 24h1v1h-1zM10 24h1v1h-1zM12 24h2v1h-2zM17 24h2v1h-2zM20 24h1v1h-1zM22 24h1v1h-1zM24 24h1v1h-1zM27 24h1v1h-1zM29 24h1v1h-1zM32 24h4v1h-4zM37 24h2v1h-2zM2 25h1v1h-1zM4 25h2v1h-2zM9 25h6v1h-6zM16 25h3v1h-3zM22 25h1v1h-1zM30 25h1v1h-1zM33 25h2v1h-2zM38 25h1v1h-1zM2 26h2v1h-2zM6 26h1v1h-1zM8 26h2v1h-2zM13 26h2v1h-2zM20 26h1v1h-1zM22 26h4v1h-4zM27 26h1v1h-1zM31 26h2v1h-2zM34 26h1v1h-1zM36 26h2v1h-2zM2 27h2v1h-2zM5 27h1v1h-1zM9 27h1v1h-1zM12 27h1v1h-1zM14 27h1v1h-1zM16 27h3v1h-3zM23 27h1v1h-1zM25 27h4v1h-4zM30 27h2v1h-2zM33 27h1v1h-1zM36 27h1v1h-1zM2 28h1v1h-1zM4 28h1v1h-1zM6 28h1v1h-1zM8 28h2v1h-2zM13 28h1v1h-1zM16 28h1v1h-1zM19 28h2v1h-2zM22 28h2v1h-2zM26 28h5v1h-5zM32 28h1v1h-1zM34 28h1v1h-1zM36 28h3v1h-3zM2 29h1v1h-1zM5 29h3v1h-3zM9 29h2v1h-2zM12 29h5v1h-5zM18 29h1v1h-1zM23 29h1v1h-1zM26 29h1v1h-1zM30 29h1v1h-1zM32 29h1v1h-1zM35 29h1v1h-1zM2 30h1v1h-1zM8 30h1v1h-1zM10 30h1v1h-1zM12 30h1v1h-1zM14 30h2v1h-2zM19 30h1v1h-1zM22 30h1v1h-1zM24 30h1v1h-1zM26 30h3v1h-3zM30 30h7v1h-7zM38 30h1v1h-1zM10 31h1v1h-1zM14 31h2v1h-2zM19 31h7v1h-7zM29 31h2v1h-2zM34 31h2v1h-2zM2 32h7v1h-7zM11 32h1v1h-1zM13 32h1v1h-1zM15 32h3v1h-3zM19 32h1v1h-1zM22 32h2v1h-2zM30 32h1v1h-1zM32 32h1v1h-1zM34 32h1v1h-1zM36 32h3v1h-3zM2 33h1v1h-1zM8 33h1v1h-1zM10 33h2v1h-2zM17 33h9v1h-9zM28 33h3v1h-3zM34 33h2v1h-2zM2 34h1v1h-1zM4 34h3v1h-3zM8 34h1v1h-1zM10 34h5v1h-5zM16 34h1v1h-1zM18 34h1v1h-1zM21 34h1v1h-1zM23 34h1v1h-1zM25 34h1v1h-1zM27 34h1v1h-1zM29 34h6v1h-6zM36 34h1v1h-1zM38 34h1v1h-1zM2 35h1v1h-1zM4 35h3v1h-3zM8 35h1v1h-1zM10 35h1v1h-1zM12 35h2v1h-2zM15 35h1v1h-1zM17 35h1v1h-1zM20 35h1v1h-1zM22 35h5v1h-5zM28 35h1v1h-1zM30 35h3v1h-3zM34 35h1v1h-1zM36 35h1v1h-1zM38 35h1v1h-1zM2 36h1v1h-1zM4 36h3v1h-3zM8 36h1v1h-1zM10 36h1v1h-1zM12 36h4v1h-4zM17 36h2v1h-2zM20 36h2v1h-2zM23 36h1v1h-1zM27 36h1v1h-1zM29 36h1v1h-1zM31 36h1v1h-1zM37 36h2v1h-2zM2 37h1v1h-1zM8 37h1v1h-1zM11 37h1v1h-1zM13 37h2v1h-2zM17 37h1v1h-1zM21 37h3v1h-3zM25 37h1v1h-1zM28 37h5v1h-5zM34 37h1v1h-1zM38 37h1v1h-1zM2 38h7v1h-7zM10 38h1v1h-1zM12 38h2v1h-2zM15 38h1v1h-1zM17 38h1v1h-1zM19 38h1v1h-1zM21 38h1v1h-1zM26 38h4v1h-4zM32 38h1v1h-1zM34 38h1v1h-1zM36 38h3v1h-3z" fill="#0F272E"/></svg><span>iPhone</span></a><a class="qr" href="https://play.google.com/store/apps/details?id=com.universalstudios.orlandoresort" rel="noopener"><svg viewBox="0 0 41 41" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 2h7v1h-7zM10 2h2v1h-2zM15 2h2v1h-2zM18 2h1v1h-1zM21 2h3v1h-3zM25 2h1v1h-1zM27 2h1v1h-1zM30 2h1v1h-1zM32 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM14 3h1v1h-1zM18 3h1v1h-1zM23 3h1v1h-1zM25 3h1v1h-1zM27 3h1v1h-1zM30 3h1v1h-1zM32 3h1v1h-1zM38 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM11 4h2v1h-2zM15 4h2v1h-2zM20 4h3v1h-3zM25 4h4v1h-4zM30 4h1v1h-1zM32 4h1v1h-1zM34 4h3v1h-3zM38 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h5v1h-5zM16 5h2v1h-2zM19 5h2v1h-2zM22 5h1v1h-1zM24 5h2v1h-2zM27 5h3v1h-3zM32 5h1v1h-1zM34 5h3v1h-3zM38 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM13 6h1v1h-1zM15 6h1v1h-1zM17 6h1v1h-1zM19 6h1v1h-1zM21 6h1v1h-1zM23 6h2v1h-2zM26 6h5v1h-5zM32 6h1v1h-1zM34 6h3v1h-3zM38 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h2v1h-2zM14 7h4v1h-4zM19 7h1v1h-1zM21 7h1v1h-1zM23 7h1v1h-1zM26 7h3v1h-3zM32 7h1v1h-1zM38 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h1v1h-1zM26 8h1v1h-1zM28 8h1v1h-1zM30 8h1v1h-1zM32 8h7v1h-7zM10 9h2v1h-2zM15 9h1v1h-1zM18 9h3v1h-3zM22 9h1v1h-1zM24 9h1v1h-1zM26 9h1v1h-1zM28 9h3v1h-3zM2 10h1v1h-1zM4 10h2v1h-2zM7 10h3v1h-3zM13 10h1v1h-1zM16 10h6v1h-6zM23 10h1v1h-1zM25 10h1v1h-1zM28 10h3v1h-3zM32 10h1v1h-1zM35 10h1v1h-1zM37 10h2v1h-2zM2 11h2v1h-2zM6 11h1v1h-1zM9 11h4v1h-4zM14 11h1v1h-1zM16 11h11v1h-11zM28 11h1v1h-1zM30 11h1v1h-1zM33 11h1v1h-1zM37 11h1v1h-1zM3 12h1v1h-1zM5 12h1v1h-1zM7 12h2v1h-2zM11 12h2v1h-2zM15 12h1v1h-1zM17 12h1v1h-1zM20 12h1v1h-1zM22 12h1v1h-1zM24 12h4v1h-4zM30 12h2v1h-2zM33 12h2v1h-2zM3 13h1v1h-1zM5 13h1v1h-1zM9 13h3v1h-3zM14 13h4v1h-4zM20 13h1v1h-1zM24 13h2v1h-2zM27 13h4v1h-4zM36 13h1v1h-1zM3 14h1v1h-1zM5 14h2v1h-2zM8 14h1v1h-1zM11 14h3v1h-3zM15 14h2v1h-2zM18 14h2v1h-2zM22 14h1v1h-1zM24 14h1v1h-1zM26 14h4v1h-4zM31 14h4v1h-4zM36 14h3v1h-3zM3 15h1v1h-1zM6 15h1v1h-1zM10 15h1v1h-1zM13 15h1v1h-1zM15 15h1v1h-1zM17 15h2v1h-2zM21 15h1v1h-1zM28 15h8v1h-8zM37 15h2v1h-2zM5 16h1v1h-1zM8 16h1v1h-1zM10 16h1v1h-1zM14 16h2v1h-2zM18 16h4v1h-4zM23 16h2v1h-2zM26 16h1v1h-1zM31 16h2v1h-2zM34 16h1v1h-1zM36 16h2v1h-2zM6 17h1v1h-1zM10 17h3v1h-3zM14 17h2v1h-2zM17 17h2v1h-2zM23 17h1v1h-1zM28 17h1v1h-1zM30 17h1v1h-1zM33 17h2v1h-2zM37 17h2v1h-2zM2 18h3v1h-3zM8 18h1v1h-1zM12 18h1v1h-1zM15 18h4v1h-4zM20 18h1v1h-1zM23 18h2v1h-2zM26 18h2v1h-2zM30 18h1v1h-1zM33 18h1v1h-1zM35 18h4v1h-4zM7 19h1v1h-1zM11 19h2v1h-2zM14 19h1v1h-1zM18 19h1v1h-1zM20 19h1v1h-1zM22 19h5v1h-5zM28 19h2v1h-2zM32 19h1v1h-1zM35 19h1v1h-1zM37 19h2v1h-2zM7 20h2v1h-2zM12 20h1v1h-1zM16 20h3v1h-3zM22 20h1v1h-1zM24 20h1v1h-1zM28 20h2v1h-2zM31 20h1v1h-1zM34 20h1v1h-1zM37 20h2v1h-2zM5 21h1v1h-1zM7 21h1v1h-1zM13 21h3v1h-3zM19 21h1v1h-1zM21 21h1v1h-1zM24 21h1v1h-1zM26 21h1v1h-1zM28 21h2v1h-2zM31 21h1v1h-1zM33 21h1v1h-1zM35 21h1v1h-1zM37 21h1v1h-1zM2 22h3v1h-3zM8 22h2v1h-2zM11 22h1v1h-1zM15 22h1v1h-1zM18 22h3v1h-3zM22 22h2v1h-2zM25 22h1v1h-1zM28 22h1v1h-1zM30 22h2v1h-2zM33 22h2v1h-2zM38 22h1v1h-1zM2 23h1v1h-1zM6 23h1v1h-1zM11 23h2v1h-2zM15 23h2v1h-2zM18 23h1v1h-1zM20 23h3v1h-3zM24 23h2v1h-2zM30 23h1v1h-1zM35 23h1v1h-1zM4 24h1v1h-1zM7 24h2v1h-2zM10 24h1v1h-1zM13 24h2v1h-2zM16 24h1v1h-1zM18 24h1v1h-1zM24 24h3v1h-3zM31 24h3v1h-3zM4 25h1v1h-1zM7 25h1v1h-1zM9 25h1v1h-1zM13 25h2v1h-2zM16 25h1v1h-1zM18 25h1v1h-1zM21 25h1v1h-1zM24 25h4v1h-4zM29 25h1v1h-1zM31 25h1v1h-1zM34 25h5v1h-5zM5 26h1v1h-1zM8 26h2v1h-2zM11 26h2v1h-2zM14 26h2v1h-2zM19 26h1v1h-1zM24 26h5v1h-5zM30 26h3v1h-3zM34 26h1v1h-1zM36 26h2v1h-2zM3 27h4v1h-4zM11 27h2v1h-2zM14 27h2v1h-2zM18 27h4v1h-4zM26 27h1v1h-1zM29 27h2v1h-2zM32 27h1v1h-1zM34 27h1v1h-1zM37 27h2v1h-2zM3 28h2v1h-2zM6 28h1v1h-1zM8 28h1v1h-1zM10 28h2v1h-2zM14 28h5v1h-5zM20 28h2v1h-2zM23 28h2v1h-2zM26 28h3v1h-3zM35 28h1v1h-1zM37 28h1v1h-1zM2 29h1v1h-1zM4 29h1v1h-1zM7 29h1v1h-1zM10 29h2v1h-2zM13 29h3v1h-3zM18 29h1v1h-1zM22 29h2v1h-2zM26 29h1v1h-1zM28 29h7v1h-7zM38 29h1v1h-1zM4 30h1v1h-1zM6 30h3v1h-3zM10 30h1v1h-1zM12 30h2v1h-2zM15 30h1v1h-1zM17 30h1v1h-1zM20 30h1v1h-1zM22 30h3v1h-3zM27 30h2v1h-2zM30 30h5v1h-5zM36 30h2v1h-2zM10 31h3v1h-3zM14 31h1v1h-1zM16 31h2v1h-2zM20 31h1v1h-1zM22 31h1v1h-1zM24 31h4v1h-4zM30 31h1v1h-1zM34 31h1v1h-1zM36 31h3v1h-3zM2 32h7v1h-7zM10 32h2v1h-2zM13 32h2v1h-2zM16 32h3v1h-3zM22 32h2v1h-2zM28 32h1v1h-1zM30 32h1v1h-1zM32 32h1v1h-1zM34 32h1v1h-1zM36 32h1v1h-1zM38 32h1v1h-1zM2 33h1v1h-1zM8 33h1v1h-1zM10 33h3v1h-3zM14 33h2v1h-2zM19 33h1v1h-1zM21 33h1v1h-1zM24 33h1v1h-1zM30 33h1v1h-1zM34 33h1v1h-1zM38 33h1v1h-1zM2 34h1v1h-1zM4 34h3v1h-3zM8 34h1v1h-1zM13 34h2v1h-2zM16 34h1v1h-1zM18 34h1v1h-1zM23 34h1v1h-1zM28 34h1v1h-1zM30 34h6v1h-6zM2 35h1v1h-1zM4 35h3v1h-3zM8 35h1v1h-1zM10 35h1v1h-1zM12 35h1v1h-1zM14 35h4v1h-4zM20 35h4v1h-4zM25 35h1v1h-1zM27 35h1v1h-1zM31 35h2v1h-2zM34 35h1v1h-1zM36 35h3v1h-3zM2 36h1v1h-1zM4 36h3v1h-3zM8 36h1v1h-1zM10 36h2v1h-2zM13 36h1v1h-1zM16 36h1v1h-1zM19 36h2v1h-2zM22 36h1v1h-1zM24 36h2v1h-2zM27 36h1v1h-1zM30 36h1v1h-1zM32 36h1v1h-1zM34 36h3v1h-3zM2 37h1v1h-1zM8 37h1v1h-1zM11 37h1v1h-1zM14 37h1v1h-1zM18 37h1v1h-1zM22 37h1v1h-1zM26 37h2v1h-2zM31 37h1v1h-1zM33 37h4v1h-4zM2 38h7v1h-7zM10 38h2v1h-2zM13 38h2v1h-2zM17 38h1v1h-1zM19 38h1v1h-1zM21 38h1v1h-1zM26 38h3v1h-3zM34 38h5v1h-5z" fill="#0F272E"/></svg><span>Android</span></a></div>
       </li>
       <li class="app">
         <span class="tag">Inglês na hora</span>
@@ -511,6 +553,50 @@
     </ul>
   </section>
 
+  <section id="educacao">
+    <p class="eyebrow">O básico que abre porta</p>
+    <h2>Educação em inglês</h2>
+    <p class="section-note">Ninguém precisa falar inglês pra ser bem tratado. Precisa de uma dúzia de palavras — e americano repara muito nelas. Quem chega pedindo sem "please" soa grosso mesmo sem querer.</p>
+    <dl class="gloss" data-card-title="Decorem estas" data-card-sub="Uma dúzia de palavras resolve 15 dias. Estão todas na página.">
+      <div class="row">
+        <dt>Excuse me <small>iks-kiúz mi</small></dt>
+        <dd>A mais útil de todas. Serve pra passar por alguém, chamar um atendente, interromper ou pedir licença na fila. <em>Nunca empurre ninguém em silêncio.</em></dd>
+      </div>
+      <div class="row">
+        <dt>Sorry <small>sóri</small></dt>
+        <dd>Esbarrou, pisou, errou, atrapalhou. Custa nada e desarma qualquer situação.</dd>
+      </div>
+      <div class="row">
+        <dt>Please <small>plíz</small></dt>
+        <dd>Vai no fim de todo pedido, sem exceção. "Water, please", "two, please". <em>Pedido sem "please" soa como ordem.</em></dd>
+      </div>
+      <div class="row">
+        <dt>Thank you <small>tênk iú</small></dt>
+        <dd>Pra tudo, o tempo todo, inclusive pra quem só segurou a porta. "Thanks" serve igual e é mais curto.</dd>
+      </div>
+      <div class="row">
+        <dt>You're welcome <small>iur uélcam</small></dt>
+        <dd>É o "de nada". Quando te agradecerem, é essa a resposta.</dd>
+      </div>
+      <div class="row">
+        <dt>Can I have…? <small>quén ai rév</small></dt>
+        <dd>Abre qualquer pedido: "Can I have a Coke, please?". Aponte no cardápio se travar — funciona.</dd>
+      </div>
+      <div class="row">
+        <dt>Just looking, thanks <small>djâst lúquin</small></dt>
+        <dd>Pra quando o vendedor da loja perguntar se precisa de ajuda e você só está olhando.</dd>
+      </div>
+      <div class="row">
+        <dt>Sorry, I don't speak English <small>ai dont spik ínglish</small></dt>
+        <dd>Sem vergonha nenhuma. Eles ouvem isso o dia inteiro, e a partir daí vão falar devagar e apontar. <em>Tentar e errar é melhor que ficar mudo.</em></dd>
+      </div>
+      <div class="row">
+        <dt>Have a nice day <small>rév a nais dêi</small></dt>
+        <dd>O "tchau" padrão. Se te disserem, responda "you too".</dd>
+      </div>
+    </dl>
+  </section>
+
   <section id="glossario">
     <p class="eyebrow">Vocabulário de parque</p>
     <h2>Palavras que você vai ouvir</h2>
@@ -519,6 +605,10 @@
       <div class="row">
         <dt>How many? <small>Quantos são?</small></dt>
         <dd>A pergunta que <em>sempre</em> vem: na fila do restaurante, no balcão, na entrada da atração. Não precisa montar frase — <em>levanta os dedinhos e fala o número em inglês</em>. "Four." Resolvido.</dd>
+      </div>
+      <div class="row">
+        <dt>Tap water <small>Água da torneira</small></dt>
+        <dd>A senha da água de graça. Peça <em>"a cup of tap water, please"</em> em qualquer balcão de lanchonete e vem um copo com gelo, sem cobrar. Se você pedir só "water", costumam trazer a garrafinha vendida.</dd>
       </div>
       <div class="row">
         <dt>Locker <small>Armário</small></dt>
@@ -549,6 +639,34 @@
         <dd>Peça a comida pelo celular, escolha a janela de horário e só vá ao balcão quando o app avisar. Economiza meia hora de fila fácil.</dd>
       </div>
     </dl>
+  </section>
+
+  <section id="descanso">
+    <p class="eyebrow">A parte que a gente decide junto</p>
+    <h2>Os dias de descanso</h2>
+    <p class="section-note">O ritmo é dois dias de parque, um de descanso. Entre os 9 dias de parque sobram os dias livres — dois já têm ideia, o resto está em aberto. <strong>Esse é o único tópico de hoje em que vocês falam mais que eu.</strong></p>
+    <ul class="rules">
+      <li>
+        <span class="rule-t">Descanso é descanso de verdade<span class="dot">.</span></span>
+        <p>Sem despertador às 6h, sem correr. Piscina, dormir até tarde, não fazer nada — isso é programação válida e ninguém precisa justificar.</p>
+        <p>Quem quiser sair, sai. Só vale o combinado de sempre: <em>avisa no grupo com antecedência</em> o que é e que horas.</p>
+      </li>
+      <li>
+        <span class="rule-t">O que já tem ideia<span class="dot">.</span></span>
+        <p><em>Primeiro descanso:</em> compras durante o dia e, à noite, o jantar de aniversário da Josi.</p>
+        <p><em>Segundo descanso:</em> praia.</p>
+        <p>Nada disso é obrigatório — quem preferir ficar na casa, fica. É ponto de partida, não escala de serviço.</p>
+      </li>
+      <li>
+        <span class="rule-t">Agora é a hora de jogar ideia<span class="dot">.</span></span>
+        <p>Fala o que você quer fazer, mesmo que pareça bobo ou caro. Outlet, Kennedy Space Center, cinema, jogo, restaurante, parque aquático, ficar na piscina o dia inteiro. <em>Se ninguém falar hoje, vira decisão de última hora — e aí não dá tempo de organizar carro.</em></p>
+        <p>Quem anima em cada ideia já se junta. Quem não anima faz outra coisa, sem mágoa. As ideias que sobrarem vão pro grupo do WhatsApp, como tudo nessa viagem.</p>
+      </li>
+    </ul>
+    <div class="callout">
+      <span class="k">A única exceção</span>
+      <p><strong>O jantar de aniversário da Josi tem hora marcada.</strong> É o único momento da viagem em que a gente queria todo mundo junto — o resto é livre de verdade.</p>
+    </div>
   </section>
 
   <section class="finale" id="fechamento">
@@ -595,6 +713,7 @@
       <button type="button" data-role="ctl" aria-pressed="false">Eu controlo</button>
       <button type="button" data-role="solo" aria-pressed="false">Só aqui</button>
     </div>
+    <button class="nav-btn ghost" id="homeBtn" type="button">↥ Início</button>
     <button class="nav-btn ghost" id="exitBtn" type="button">Sair</button>
     <p class="sync-note" id="syncNote">Passando os slides só neste aparelho.</p>
   </div>
@@ -677,6 +796,7 @@ var POLL_MS  = 1500;
     apps:'<svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="38" y="6" width="44" height="88" rx="8"/><path d="M54 18h12"/><circle cx="60" cy="80" r="4"/><path d="M50 40h20M50 52h20"/></svg>',
     pratica:'<svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="8" width="80" height="84" rx="8"/><path d="M36 32l8 8 16-16M36 60l8 8 16-16"/><path d="M72 36h14M72 64h14"/></svg>',
     glossario:'<svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14h38a10 10 0 0110 10v62a10 10 0 00-10-8H12z"/><path d="M108 14H70a10 10 0 00-10 10v62a10 10 0 0110-8h38z"/></svg>',
+    descanso:'<svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 50a50 34 0 01100 0"/><path d="M10 50q12-10 25 0Q48 40 60 50q12-10 25 0t25 0"/><path d="M60 16v76"/><path d="M60 92q0 8 9 6"/></svg>',
     fechamento:'<svg viewBox="0 0 120 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 30l10 10 18-18"/><path d="M14 58l10 10 18-18"/><path d="M14 86l10 10 18-18"/><path d="M56 30h50M56 58h50M56 86h38"/></svg>'
   };
 
@@ -703,6 +823,7 @@ var POLL_MS  = 1500;
         var items=[].map.call(el.children,function(li){
           var t=li.querySelector('.rule-t');
           return { t: t?t.innerHTML:'',
+                   img: li.getAttribute('data-img'),
                    n: [].map.call(li.querySelectorAll('p'),function(p){return '<p>'+p.innerHTML+'</p>';}).join('') };
         });
         var size = items.length>5 ? Math.ceil(items.length/2) : items.length;
@@ -726,8 +847,9 @@ var POLL_MS  = 1500;
         slides.push({kind:'chat', label:label, title:h3?h3.textContent:'', items:msgs});
       } else if(cn.indexOf(' apps ')>-1){
         var apps=[].map.call(el.children,function(li){
-          var h=li.querySelector('h3'), pa=li.querySelector('p');
-          return { t: h?h.textContent:'', n: pa?'<p>'+pa.innerHTML+'</p>':'' };
+          var h=li.querySelector('h3'), pa=li.querySelector('p'), q=li.querySelector('.qr-row');
+          return { t: h?h.textContent:'', n: pa?'<p>'+pa.innerHTML+'</p>':'',
+                   extra: q?'<div class="s-qr">'+q.innerHTML+'</div>':null };
         });
         slides.push({kind:'topics', label:label, items:apps});
       } else if(cn.indexOf(' check-grid ')>-1){
@@ -742,8 +864,10 @@ var POLL_MS  = 1500;
           var c=dt.cloneNode(true); var sm=c.querySelector('small'); if(sm) sm.parentNode.removeChild(sm);
           return '<li>'+esc((c.textContent||'').trim())+'</li>';
         }).join('');
-        slides.push({kind:'chips', label:'Abram no celular', title:'O glossário fica na página',
-          sub:'São nove palavras que vocês vão ouvir nos parques. Leiam no voo.', chips:terms});
+        slides.push({kind:'chips', label:'Abram no celular',
+          title: el.getAttribute('data-card-title') || 'O glossário fica na página',
+          sub: el.getAttribute('data-card-sub') || 'São as palavras que vocês vão ouvir nos parques. Leiam no voo.',
+          chips:terms});
       } else if(cn.indexOf(' pacts ')>-1){
         var pacts=[].map.call(el.children,function(li){
           var n=li.querySelector('.n'), bb=li.querySelector('b'), sp=li.querySelector('span:not(.n)');
@@ -757,7 +881,7 @@ var POLL_MS  = 1500;
   /* posições = (slide, quantos itens revelados) */
   var pos=[];
   slides.forEach(function(s,si){
-    var steps = (s.items && s.items.length) ? s.items.length : 1;
+    var steps = (s.items && s.items.length && s.kind!=='chat') ? s.items.length : 1;
     for(var k=1;k<=steps;k++) pos.push({si:si, k:k});
   });
 
@@ -775,6 +899,7 @@ var POLL_MS  = 1500;
 
   function headline(p){
     var s=slides[p.si];
+    if(s.kind==='chat') return txt(s.title||s.label);
     if(s.items && s.items.length) return txt(s.items[p.k-1].t);
     return txt(s.title||s.label);
   }
@@ -791,17 +916,22 @@ var POLL_MS  = 1500;
          (s.sub?'<p class="s-sub">'+s.sub+'</p>':'')+
          '</div>'+side+'</div>';
     } else if(s.kind==='topics'){
-      h+='<p class="s-label">'+s.label+'</p><ul class="s-topics">';
+      var cur=s.items[k-1], list='<ul class="s-topics">';
       s.items.forEach(function(it,i){
         if(i>=k) return;
-        h+='<li class="'+(i===k-1?'on':'')+'"><span class="bul">●</span><span>'+it.t+'</span></li>';
+        list+='<li class="'+(i===k-1?'on':'')+'"><span class="bul">●</span><span>'+it.t+'</span></li>';
       });
-      h+='</ul>';
+      list+='</ul>';
+      h+='<p class="s-label">'+s.label+'</p>';
+      var side = cur && cur.img ? '<div class="s-figure"><img src="'+cur.img+'" alt=""></div>'
+               : (cur && cur.extra ? cur.extra : '');
+      if(side){ h+='<div class="s-open"><div>'+list+'</div>'+side+'</div>'; }
+      else { h+=list; }
     } else if(s.kind==='quote'){
       h+='<p class="s-label">'+s.label+'</p><p class="s-quote">'+s.title+'</p>';
     } else if(s.kind==='chat'){
       h+='<p class="s-label">'+s.label+'</p><h2 class="s-title" style="font-size:clamp(1.4rem,3vw,2.4rem)">'+s.title+'</h2><div style="max-width:900px">';
-      s.items.forEach(function(it,i){ if(i<k) h+=it.t; });
+      s.items.forEach(function(it){ h+=it.t; });
       h+='</div>';
     } else if(s.kind==='chips'){
       h+='<p class="s-label">'+s.label+'</p><h2 class="s-title" style="font-size:clamp(1.6rem,3.6vw,3rem)">'+s.title+'</h2>'+
@@ -819,7 +949,8 @@ var POLL_MS  = 1500;
 
   function presHTML(p){
     var s=slides[p.si], k=p.k, title, note;
-    if(s.items && s.items.length){ title=s.items[k-1].t; note=s.items[k-1].n; }
+    if(s.kind==='chat'){ title=s.title; note=s.items.map(function(it){return it.t;}).join(''); }
+    else if(s.items && s.items.length){ title=s.items[k-1].t; note=s.items[k-1].n; }
     else { title=s.title; note=s.sub?'<p>'+s.sub+'</p>':''; }
     var nxt = idx+1<pos.length ? headline(pos[idx+1]) : 'Fim da apresentação';
     return '<div class="pres">'+
@@ -908,6 +1039,7 @@ var POLL_MS  = 1500;
     body.className=body.className.replace(/\s*presenting/,'');
     if(role!=='solo') setRole('solo');
   });
+  document.getElementById('homeBtn').addEventListener('click',function(){ go(0); });
   prevBtn.addEventListener('click',function(){ go(idx-1); });
   nextBtn.addEventListener('click',function(){ go(idx+1); });
   document.getElementById('tapPrev').addEventListener('click',function(){ go(idx-1); });
@@ -923,6 +1055,7 @@ var POLL_MS  = 1500;
     if(role==='follow') return;
     if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); go(idx+1); }
     if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); go(idx-1); }
+    if(e.key==='Home'){ e.preventDefault(); go(0); }
   });
 
   var tx=0,ty=0;
