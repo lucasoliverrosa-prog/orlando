@@ -183,6 +183,116 @@
   .s-qr .qr svg{width:clamp(120px,15vw,210px);height:clamp(120px,15vw,210px)}
   .s-qr .qr span{font-size:clamp(.6rem,.9vw,.8rem)}
 
+
+  /* ================= shell do app ================= */
+  .applayout{display:block}
+  .sidebar{
+    position:fixed;left:0;top:0;bottom:0;width:212px;z-index:30;
+    background:var(--surface);border-right:1px solid var(--line);
+    display:flex;flex-direction:column;gap:18px;
+    padding:calc(22px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .side-brand{display:flex;flex-direction:column;gap:3px}
+  .side-brand b{font-family:var(--display);font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
+  .side-brand span{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--muted)}
+  .side-nav{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto}
+  .side-link{
+    font-family:var(--body);font-size:.95rem;font-weight:500;text-align:left;
+    background:none;border:none;color:var(--muted);padding:9px 11px;border-radius:7px;cursor:pointer;
+  }
+  .side-link:hover{background:var(--surface-2);color:var(--ink)}
+  .side-link[aria-current="true"]{background:var(--teal);color:#fff}
+  .side-foot{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+  .side-foot label{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .side-foot select{
+    font-family:var(--body);font-size:.9rem;padding:8px 9px;border-radius:7px;
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);width:100%;
+  }
+  .viewport{margin-left:212px;min-height:100vh}
+  .view{display:none}
+  .view.on{display:block}
+  .viewpad{padding-block:clamp(30px,5vw,58px)}
+  .view-h{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.4vw,2.8rem);
+    line-height:1.03;letter-spacing:-.025em;margin:0 0 10px}
+  .lockpad{max-width:640px;margin-inline:0}
+
+  @media (max-width:860px){
+    .sidebar{
+      left:0;right:0;top:auto;bottom:0;width:auto;flex-direction:row;align-items:center;gap:10px;
+      border-right:none;border-top:1px solid var(--line);
+      padding:8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    }
+    .side-brand{display:none}
+    .side-foot{border-top:none;padding-top:0;flex:none;max-width:38%}
+    .side-foot label{display:none}
+    .side-foot select{font-size:.8rem;padding:7px}
+    .side-nav{flex-direction:row;gap:4px;overflow-x:auto;scrollbar-width:none}
+    .side-nav::-webkit-scrollbar{display:none}
+    .side-link{white-space:nowrap;font-size:.85rem;padding:8px 12px}
+    .viewport{margin-left:0;padding-bottom:78px}
+    .topbar{top:0}
+  }
+
+  /* ---------- cronograma ---------- */
+  .agenda{display:grid;gap:12px}
+  .day{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .day.livre{border-left:4px solid var(--sun)}
+  .day.viagem{border-left:4px solid var(--muted)}
+  .day.parque{border-left:4px solid var(--teal)}
+  .day-top{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+  .day-date{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;color:var(--muted);
+    text-transform:uppercase;flex:none;min-width:8.5em}
+  .day-t{font-family:var(--display);font-weight:700;font-size:1.2em;letter-spacing:-.015em;flex:1;min-width:0}
+  .day-sub{color:var(--muted);font-size:.95em;margin:4px 0 0}
+  .day-hours{display:flex;align-items:center;gap:7px;margin-top:8px}
+  .day-hours span{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .day-hours input{font-family:var(--mono);font-size:.8rem;padding:5px 8px;border-radius:6px;
+    border:1px dashed var(--line);background:transparent;color:var(--ink);width:14em}
+  .day-hours input:focus{border-style:solid;border-color:var(--teal)}
+  .names{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .name{font-family:var(--body);font-size:.82rem;font-weight:500;cursor:pointer;
+    background:var(--paper);border:1px solid var(--line);color:var(--muted);
+    padding:5px 11px;border-radius:999px}
+  .name:hover{border-color:var(--teal);color:var(--ink)}
+  .name.on{background:var(--teal);border-color:var(--teal);color:#fff}
+  .name.me{box-shadow:0 0 0 2px var(--sun-fill)}
+  .count{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;color:var(--muted);
+    margin-top:9px;display:block}
+  .ideas{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+  .idea{display:flex;gap:9px;align-items:baseline;font-size:.92em;margin:0 0 6px}
+  .idea b{font-family:var(--display);font-weight:700;flex:none}
+  .idea span{color:var(--muted)}
+  .idea button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9em;padding:0 4px}
+  .idea button:hover{color:var(--coral)}
+  .addform{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+  .addform input{flex:1;min-width:150px;font-family:var(--body);font-size:.92rem;
+    padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+  .ideas .addform{margin:10px 0 0}
+  .ideas .addform input{font-size:.88rem;padding:7px 10px}
+  .ideas .addform .nav-btn{padding:8px 16px;font-size:.85rem}
+
+  /* ---------- cards de carro / quarto / restaurante ---------- */
+  .cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr))}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .card h3{font-family:var(--display);font-weight:700;font-size:1.15em;margin:0 0 3px;letter-spacing:-.015em}
+  .card .meta{font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--teal);margin:0 0 8px}
+  .card .desc{color:var(--muted);font-size:.92em;margin:0 0 4px}
+  .card .warn{color:var(--coral);font-weight:700}
+  .seats{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .seats label{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .seats input{width:4.2em;font-family:var(--mono);font-size:.85rem;padding:5px 8px;
+    border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+  .seats .free{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+  .seats .free.cheio{color:var(--coral)}
+  .rest-by{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;color:var(--muted);margin-top:8px;display:block}
+  .del{background:none;border:1px solid var(--line);color:var(--muted);border-radius:6px;
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;padding:4px 9px;cursor:pointer;margin-top:10px}
+  .del:hover{border-color:var(--coral);color:var(--coral)}
+  .empty{color:var(--muted);font-style:italic}
+  .savebar{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--muted);margin:0 0 16px;min-height:1.2em}
+  .savebar.err{color:var(--coral)}
+
   /* ---------- apresentação ---------- */
   .deck{position:fixed;inset:0;z-index:100;background:var(--paper);display:none;flex-direction:column;
     padding-top:env(safe-area-inset-top, 0px);padding-bottom:env(safe-area-inset-bottom, 0px)}
@@ -288,6 +398,66 @@
 </head>
 <body>
 
+<div class="applayout">
+<nav class="sidebar" id="sidebar" aria-label="Menu principal">
+  <div class="side-brand"><b>Orlando</b><span>22 set – 6 out · 2026</span></div>
+  <div class="side-nav">
+    <button type="button" class="side-link" data-view="cronograma">Cronograma</button>
+    <button type="button" class="side-link" data-view="carros">Carros</button>
+    <button type="button" class="side-link" data-view="quartos">Quartos</button>
+    <button type="button" class="side-link" data-view="restaurantes">Restaurantes</button>
+    <button type="button" class="side-link" data-view="reuniao" id="linkReuniao" hidden>Reunião</button>
+  </div>
+  <div class="side-foot">
+    <label for="whoAmI">Quem é você</label>
+    <select id="whoAmI"><option value="">escolha seu nome</option></select>
+  </div>
+</nav>
+
+<div class="viewport">
+
+<section class="view" id="v-cronograma">
+  <div class="wrap viewpad">
+    <p class="eyebrow">15 dias</p>
+    <h2 class="view-h">Cronograma</h2>
+    <p class="section-note">Toque no seu nome no dia que você vai. Ninguém precisa ir em tudo — a ideia é justamente cada um saber quem vai onde. Nos dias livres, jogue ideias.</p>
+    <div id="agenda" class="agenda"></div>
+  </div>
+</section>
+
+<section class="view" id="v-carros">
+  <div class="wrap viewpad">
+    <p class="eyebrow">4 carros</p>
+    <h2 class="view-h">Carros</h2>
+    <p class="section-note">Quem está em cada carro e quantos lugares sobram. Dá pra ajustar a quantidade de lugares quando vocês virem os carros de verdade.</p>
+    <div id="carros" class="cards"></div>
+  </div>
+</section>
+
+<section class="view" id="v-quartos">
+  <div class="wrap viewpad">
+    <p class="eyebrow">7 quartos</p>
+    <h2 class="view-h">Quartos</h2>
+    <p class="section-note">Quem dorme onde e qual banheiro é de quem. Os quartos 4 e 5 dividem o mesmo banheiro (Jack e Jill) — combinem horário entre vocês. Dá pra trocar de quarto aqui mesmo. <strong>Quartos 1 e 2 no térreo; do 3 ao 7 no andar de cima.</strong></p>
+    <div id="quartos" class="cards"></div>
+  </div>
+</section>
+
+<section class="view" id="v-restaurantes">
+  <div class="wrap viewpad">
+    <p class="eyebrow">Sugestões da turma</p>
+    <h2 class="view-h">Restaurantes</h2>
+    <p class="section-note">Achou um lugar bom, viu um vídeo, alguém indicou? Joga aqui. Não é reserva nem compromisso — é uma lista pra quando ninguém souber onde comer.</p>
+    <form id="restForm" class="addform">
+      <input id="restNome" type="text" maxlength="60" placeholder="Nome do lugar" required>
+      <input id="restObs" type="text" maxlength="120" placeholder="Por que vale (opcional)">
+      <button class="nav-btn" type="submit">Adicionar</button>
+    </form>
+    <div id="restLista" class="cards"></div>
+  </div>
+</section>
+
+<section class="view" id="v-reuniao">
 <div class="topbar">
   <div class="wrap topbar-inner">
     <span class="brand">Orlando · 15 dias</span>
@@ -719,6 +889,24 @@
   </footer>
 
 </main>
+</section>
+
+<div class="view" id="v-trava">
+  <div class="wrap viewpad lockpad">
+    <p class="eyebrow">Ainda não</p>
+    <h2 class="view-h">A reunião abre dia 23</h2>
+    <p class="section-note">Essa parte é a conversa do primeiro dia. Ela abre sozinha pra todo mundo em <strong>23 de setembro</strong>, depois que a gente sentar junto. Até lá fica guardada — sem graça saber o final antes.</p>
+    <form id="lockForm" class="addform">
+      <input id="lockPass" type="password" placeholder="Senha" autocomplete="off">
+      <button class="nav-btn" type="submit">Entrar</button>
+    </form>
+    <p class="sync-note" id="lockMsg"></p>
+  </div>
+</div>
+
+</div>
+</div>
+
 
 <div class="deck" id="deck" role="dialog" aria-label="Modo apresentação" aria-modal="true">
   <button class="tapzone prev" id="tapPrev" type="button" aria-label="Slide anterior"></button>
@@ -1097,5 +1285,340 @@ var POLL_MS  = 1500;
   }
 })();
 </script>
+
+<script>
+/* ==========================================================================
+   APP — cronograma, carros, quartos, restaurantes.
+   Usa o mesmo Firebase do SYNC_URL, no caminho /orlando/app.
+   Troque a senha abaixo se quiser.
+   ========================================================================== */
+var REUNIAO_SENHA = "casa2026";
+var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);   // 23/09/2026, hora local
+
+(function(){
+  var body=document.body;
+  var BASE = SYNC_URL ? SYNC_URL.replace(/\/[^\/]+\.json.*$/, '') + '/app' : '';
+  function api(p){ return BASE + (p||'') + '.json'; }
+
+  function slug(n){
+    return n.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  }
+  var PESSOAS = ['Lucas','Josi','Vera','Madu','Laura','Andre','Zé','Rosy','Andressa',
+                 'Giovany','Mayara','Luzinete','Isabele','Gabriel','Vitor']
+    .map(function(n){ return {id:slug(n), nome:n}; });
+  function nomeDe(id){ for(var i=0;i<PESSOAS.length;i++) if(PESSOAS[i].id===id) return PESSOAS[i].nome; return id; }
+
+  var AGENDA=[
+    {d:'2026-09-22',dia:'Ter',t:'Chegada em Orlando',sub:'Chegar, pegar os carros, mercado e explorar',tipo:'viagem'},
+    {d:'2026-09-23',dia:'Qua',t:'Magic Kingdom',tipo:'parque'},
+    {d:'2026-09-24',dia:'Qui',t:'Animal Kingdom',tipo:'parque'},
+    {d:'2026-09-25',dia:'Sex',t:'Dia livre',sub:'Lucas e Josi vão ao outlet. À noite, o aniversário da Josi.',tipo:'livre'},
+    {d:'2026-09-26',dia:'Sáb',t:'EPCOT',tipo:'parque'},
+    {d:'2026-09-27',dia:'Dom',t:'Hollywood Studios',tipo:'parque'},
+    {d:'2026-09-28',dia:'Seg',t:'Dia livre',sub:'Lucas e Josi vão à praia.',tipo:'livre'},
+    {d:'2026-09-29',dia:'Ter',t:'Islands of Adventure',tipo:'parque'},
+    {d:'2026-09-30',dia:'Qua',t:'Universal Studios',tipo:'parque'},
+    {d:'2026-10-01',dia:'Qui',t:'Dia livre',sub:'Sem plano ainda — joguem ideias aqui.',tipo:'livre'},
+    {d:'2026-10-02',dia:'Sex',t:'Epic Universe',tipo:'parque'},
+    {d:'2026-10-03',dia:'Sáb',t:'SeaWorld',tipo:'parque'},
+    {d:'2026-10-04',dia:'Dom',t:'Dia livre',sub:'Sem plano ainda — joguem ideias aqui.',tipo:'livre'},
+    {d:'2026-10-05',dia:'Seg',t:'Busch Gardens',tipo:'parque'},
+    {d:'2026-10-06',dia:'Ter',t:'Voltar pra casa',tipo:'viagem'}
+  ];
+  var CARROS=[
+    {id:'c1',nome:'Carro 1',lugares:4,ocupantes:['gabriel','isabele','luzinete'],obs:'Guilherme vai no bebê conforto e ocupa um lugar.'},
+    {id:'c2',nome:'Carro 2',lugares:7,ocupantes:['lucas','josi','vitor','vera']},
+    {id:'c3',nome:'Carro 3',lugares:4,ocupantes:['andre','laura','madu']},
+    {id:'c4',nome:'Carro 4',lugares:5,ocupantes:['ze','rosy','andressa','giovany','mayara']}
+  ];
+  var QUARTOS=[
+    {id:'q1',nome:'Quarto 1',meta:'Térreo',cama:'Cama king',banho:'Banheiro privativo',ocupantes:['laura','andre']},
+    {id:'q2',nome:'Quarto 2',meta:'Térreo',cama:'2 camas completas',banho:'Banheiro completo ao lado',ocupantes:['mayara','vera','madu']},
+    {id:'q3',nome:'Quarto 3',meta:'Andar de cima',cama:'Cama king',banho:'Banheiro privativo',ocupantes:['lucas','josi']},
+    {id:'q4',nome:'Quarto 4',meta:'Andar de cima',cama:'2 camas de casal',banho:'Banheiro Jack e Jill — dividido com o Quarto 5',compart:true,ocupantes:['vitor','luzinete']},
+    {id:'q5',nome:'Quarto 5',meta:'Andar de cima',cama:'1 cama de casal',banho:'Banheiro Jack e Jill — dividido com o Quarto 4',compart:true,ocupantes:['giovany','andressa']},
+    {id:'q6',nome:'Quarto 6',meta:'Andar de cima',cama:'2 camas de casal',banho:'Banheiro completo do outro lado do corredor',ocupantes:['ze','rosy']},
+    {id:'q7',nome:'Quarto 7',meta:'Andar de cima',cama:'Cama queen',banho:'Banheiro privativo',ocupantes:['gabriel','isabele'],obs:'Guilherme dorme aqui.'}
+  ];
+
+  var remoto={}, eu=null, viewAtual='cronograma', timer=null;
+  function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){ return null; } }
+  function esc(t){ var d=document.createElement('div'); d.textContent=(t==null?'':t); return d.innerHTML; }
+  function digitando(alvo){
+    var a=document.activeElement;
+    if(!a || !alvo.contains(a)) return false;
+    return a.tagName==='INPUT' || a.tagName==='TEXTAREA';
+  }
+
+  var bar=null;
+  function aviso(txt,err){
+    if(!bar) return;
+    bar.textContent=txt||'';
+    bar.className='savebar'+(err?' err':'');
+    if(txt && !err) setTimeout(function(){ if(bar.textContent===txt) bar.textContent=''; },2500);
+  }
+
+  function req(metodo,caminho,dados){
+    if(!BASE) return Promise.reject(new Error('sem canal'));
+    var o={method:metodo};
+    if(dados!==undefined){ o.body=JSON.stringify(dados); o.headers={'Content-Type':'application/json'}; }
+    return fetch(api(caminho),o).then(function(r){
+      if(!r.ok) throw new Error(r.status); return r.json();
+    });
+  }
+  function puxar(){
+    if(!BASE) return Promise.resolve();
+    return fetch(api(''),{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      remoto = d || {}; pinta();
+    }).catch(function(){});
+  }
+  function salvar(metodo,caminho,dados){
+    aviso('salvando…');
+    return req(metodo,caminho,dados).then(function(){ aviso('salvo'); return puxar(); })
+      .catch(function(){ aviso('não salvou — sem conexão com o canal',true); });
+  }
+
+  /* ---------- helpers de estado ---------- */
+  function dia(d){ return (remoto.dias && remoto.dias[d]) || {}; }
+  function participantes(d){ var p=dia(d).participantes||{}; return Object.keys(p).filter(function(k){return p[k];}); }
+  function ocupantesDe(tipo,id,padrao){
+    var r = remoto[tipo] && remoto[tipo][id] && remoto[tipo][id].ocupantes;
+    return r ? (Array.isArray(r)?r:Object.keys(r)) : padrao.slice();
+  }
+  function lugaresDe(id,padrao){
+    var r = remoto.carros && remoto.carros[id] && remoto.carros[id].lugares;
+    return (typeof r==='number' && r>0) ? r : padrao;
+  }
+
+  /* ---------- chips de nomes ---------- */
+  function chips(ativos,onToggle){
+    var box=document.createElement('div'); box.className='names';
+    PESSOAS.forEach(function(p){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='name'+(ativos.indexOf(p.id)>-1?' on':'')+(eu===p.id?' me':'');
+      b.textContent=p.nome;
+      b.addEventListener('click',function(){ onToggle(p.id, ativos.indexOf(p.id)===-1); });
+      box.appendChild(b);
+    });
+    return box;
+  }
+
+  /* ---------- cronograma ---------- */
+  function pintaAgenda(){
+    var alvo=document.getElementById('agenda'); if(!alvo) return;
+    if(digitando(alvo)) return;
+    alvo.innerHTML='';
+    AGENDA.forEach(function(a){
+      var card=document.createElement('div'); card.className='day '+a.tipo;
+      var pt=new Date(a.d+'T12:00:00');
+      var dataTxt=a.dia+' · '+String(pt.getDate()).padStart(2,'0')+'/'+String(pt.getMonth()+1).padStart(2,'0');
+      var ativos=participantes(a.d);
+      var h='<div class="day-top"><span class="day-date">'+dataTxt+'</span><span class="day-t">'+esc(a.t)+'</span></div>';
+      if(a.sub) h+='<p class="day-sub">'+esc(a.sub)+'</p>';
+      if(a.tipo==='parque'){
+        h+='<div class="day-hours"><span>Abre e fecha</span><input type="text" maxlength="40" placeholder="preencha pelo app do parque" value="'+esc(dia(a.d).horario||'')+'" data-h="'+a.d+'"></div>';
+      }
+      card.innerHTML=h;
+      card.appendChild(chips(ativos,function(id,ligar){
+        salvar(ligar?'PUT':'DELETE','/dias/'+a.d+'/participantes/'+id, ligar?true:undefined);
+      }));
+      var c=document.createElement('span'); c.className='count';
+      c.textContent=ativos.length+' de 15 marcados';
+      card.appendChild(c);
+
+      if(a.tipo==='livre'){
+        var ideias=dia(a.d).ideias||{};
+        var wrap=document.createElement('div'); wrap.className='ideas';
+        var ks=Object.keys(ideias);
+        if(!ks.length) wrap.innerHTML='<p class="idea empty">Nenhuma ideia ainda. Seja o primeiro.</p>';
+        ks.forEach(function(k){
+          var it=ideias[k];
+          var row=document.createElement('p'); row.className='idea';
+          row.innerHTML='<b>'+esc(it.t)+'</b><span>'+esc(it.por||'alguém')+'</span>';
+          var x=document.createElement('button'); x.type='button'; x.textContent='remover'; x.title='Remover ideia';
+          x.addEventListener('click',function(){ salvar('DELETE','/dias/'+a.d+'/ideias/'+k); });
+          row.appendChild(x); wrap.appendChild(row);
+        });
+        var f=document.createElement('form'); f.className='addform';
+        f.innerHTML='<input type="text" maxlength="80" placeholder="Sua ideia pra esse dia" required><button class="nav-btn" type="submit">Jogar ideia</button>';
+        f.addEventListener('submit',function(e){
+          e.preventDefault();
+          var v=f.querySelector('input').value.trim(); if(!v) return;
+          f.querySelector('input').value='';
+          salvar('POST','/dias/'+a.d+'/ideias',{t:v,por:eu?nomeDe(eu):'',ts:Date.now()});
+        });
+        wrap.appendChild(f);
+        card.appendChild(wrap);
+      }
+      alvo.appendChild(card);
+    });
+    [].forEach.call(alvo.querySelectorAll('input[data-h]'),function(inp){
+      inp.addEventListener('change',function(){
+        salvar('PUT','/dias/'+inp.getAttribute('data-h')+'/horario', inp.value.trim());
+      });
+    });
+  }
+
+  /* ---------- carros ---------- */
+  function pintaCarros(){
+    var alvo=document.getElementById('carros'); if(!alvo) return;
+    if(digitando(alvo)) return;
+    alvo.innerHTML='';
+    CARROS.forEach(function(c){
+      var oc=ocupantesDe('carros',c.id,c.ocupantes), lug=lugaresDe(c.id,c.lugares);
+      var extra = c.id==='c1' ? 1 : 0;              // bebê conforto
+      var usados = oc.length + extra, livres = lug-usados;
+      var card=document.createElement('div'); card.className='card';
+      card.innerHTML='<h3>'+esc(c.nome)+'</h3>'+
+        (c.obs?'<p class="desc">'+esc(c.obs)+'</p>':'');
+      card.appendChild(chips(oc,function(id,ligar){
+        var novo=oc.slice(); if(ligar) novo.push(id); else novo.splice(novo.indexOf(id),1);
+        salvar('PUT','/carros/'+c.id+'/ocupantes',novo);
+      }));
+      var s=document.createElement('div'); s.className='seats';
+      s.innerHTML='<label for="lug-'+c.id+'">Lugares</label>'+
+        '<input id="lug-'+c.id+'" type="number" min="1" max="9" value="'+lug+'" data-c="'+c.id+'">'+
+        '<span class="free'+(livres<=0?' cheio':'')+'">'+usados+' ocupados · '+(livres>0?livres+' livre'+(livres>1?'s':''):'lotado')+'</span>';
+      card.appendChild(s);
+      alvo.appendChild(card);
+    });
+    [].forEach.call(alvo.querySelectorAll('input[data-c]'),function(inp){
+      inp.addEventListener('change',function(){
+        var v=parseInt(inp.value,10); if(!(v>0)) return;
+        salvar('PUT','/carros/'+inp.getAttribute('data-c')+'/lugares',v);
+      });
+    });
+  }
+
+  /* ---------- quartos ---------- */
+  function pintaQuartos(){
+    var alvo=document.getElementById('quartos'); if(!alvo) return;
+    if(digitando(alvo)) return;
+    alvo.innerHTML='';
+    QUARTOS.forEach(function(q){
+      var oc=ocupantesDe('quartos',q.id,q.ocupantes);
+      var card=document.createElement('div'); card.className='card';
+      card.innerHTML='<h3>'+esc(q.nome)+'</h3><p class="meta">'+esc(q.meta)+'</p>'+
+        '<p class="desc">'+esc(q.cama)+'</p>'+
+        '<p class="desc'+(q.compart?' warn':'')+'">'+esc(q.banho)+'</p>'+
+        (q.obs?'<p class="desc">'+esc(q.obs)+'</p>':'');
+      card.appendChild(chips(oc,function(id,ligar){
+        var novo=oc.slice(); if(ligar) novo.push(id); else novo.splice(novo.indexOf(id),1);
+        salvar('PUT','/quartos/'+q.id+'/ocupantes',novo);
+      }));
+      alvo.appendChild(card);
+    });
+  }
+
+  /* ---------- restaurantes ---------- */
+  function pintaRest(){
+    var alvo=document.getElementById('restLista'); if(!alvo) return;
+    alvo.innerHTML='';
+    var r=remoto.restaurantes||{}, ks=Object.keys(r);
+    if(!ks.length){ alvo.innerHTML='<p class="empty">Nenhuma sugestão ainda.</p>'; return; }
+    ks.sort(function(a,b){ return (r[b].ts||0)-(r[a].ts||0); });
+    ks.forEach(function(k){
+      var it=r[k];
+      var card=document.createElement('div'); card.className='card';
+      card.innerHTML='<h3>'+esc(it.nome)+'</h3>'+(it.obs?'<p class="desc">'+esc(it.obs)+'</p>':'')+
+        '<span class="rest-by">sugestão de '+esc(it.por||'alguém')+'</span>';
+      var x=document.createElement('button'); x.className='del'; x.type='button'; x.textContent='remover';
+      x.addEventListener('click',function(){ salvar('DELETE','/restaurantes/'+k); });
+      card.appendChild(x);
+      alvo.appendChild(card);
+    });
+  }
+
+  function pinta(){
+    if(viewAtual==='cronograma') pintaAgenda();
+    else if(viewAtual==='carros') pintaCarros();
+    else if(viewAtual==='quartos') pintaQuartos();
+    else if(viewAtual==='restaurantes') pintaRest();
+  }
+
+  /* ---------- navegação ---------- */
+  var links=[].slice.call(document.querySelectorAll('.side-link'));
+  function liberada(){
+    if(new Date() >= REUNIAO_ABRE) return true;
+    return ls('orlando_reuniao')==='1';
+  }
+  function mostra(v){
+    if(v==='reuniao' && !liberada()) v='trava';
+    viewAtual=v;
+    [].forEach.call(document.querySelectorAll('.view'),function(el){
+      el.className = 'view'+(el.id==='v-'+v?' on':'');
+    });
+    links.forEach(function(l){ l.setAttribute('aria-current', l.getAttribute('data-view')===v?'true':'false'); });
+    bar=document.querySelector('#v-'+v+' .savebar')||bar;
+    window.scrollTo(0,0);
+    pinta();
+    if(timer) clearInterval(timer);
+    if(BASE && v!=='reuniao' && v!=='trava'){ puxar(); timer=setInterval(puxar,6000); }
+  }
+  links.forEach(function(l){
+    l.addEventListener('click',function(){
+      var v=l.getAttribute('data-view');
+      location.hash = v;
+      mostra(v);
+    });
+  });
+  function aplicaLiberacao(){
+    document.getElementById('linkReuniao').hidden = !liberada();
+  }
+
+  /* ---------- trava ---------- */
+  var lockForm=document.getElementById('lockForm');
+  lockForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=document.getElementById('lockPass').value;
+    if(v===REUNIAO_SENHA){
+      ls('orlando_reuniao','1');
+      aplicaLiberacao();
+      document.getElementById('lockMsg').textContent='';
+      mostra('reuniao');
+    } else {
+      document.getElementById('lockMsg').textContent='Senha errada.';
+      document.getElementById('lockPass').value='';
+    }
+  });
+
+  /* ---------- quem é você ---------- */
+  var sel=document.getElementById('whoAmI');
+  PESSOAS.forEach(function(p){
+    var o=document.createElement('option'); o.value=p.id; o.textContent=p.nome; sel.appendChild(o);
+  });
+  eu = ls('orlando_eu') || null;
+  if(eu) sel.value=eu;
+  sel.addEventListener('change',function(){ eu=sel.value||null; ls('orlando_eu',eu||''); pinta(); });
+
+  /* ---------- barras de status ---------- */
+  ['cronograma','carros','quartos','restaurantes'].forEach(function(v){
+    var host=document.querySelector('#v-'+v+' .section-note');
+    if(host){ var p=document.createElement('p'); p.className='savebar'; host.parentNode.insertBefore(p,host.nextSibling); }
+  });
+
+  /* ---------- restaurantes: form ---------- */
+  document.getElementById('restForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=document.getElementById('restNome'), o=document.getElementById('restObs');
+    var nome=n.value.trim(); if(!nome) return;
+    salvar('POST','/restaurantes',{nome:nome,obs:o.value.trim(),por:eu?nomeDe(eu):'',ts:Date.now()});
+    n.value=''; o.value='';
+  });
+
+  /* ---------- início ---------- */
+  aplicaLiberacao();
+  var inicial=(location.hash||'').replace('#','');
+  if(['cronograma','carros','quartos','restaurantes','reuniao'].indexOf(inicial)<0) inicial='cronograma';
+  mostra(inicial);
+  window.addEventListener('hashchange',function(){
+    var v=(location.hash||'').replace('#','');
+    if(['cronograma','carros','quartos','restaurantes','reuniao'].indexOf(v)>-1 && v!==viewAtual) mostra(v);
+  });
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) puxar(); });
+})();
+</script>
+
 </body>
 </html>

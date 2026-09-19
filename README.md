@@ -99,13 +99,18 @@ vá em **Realtime Database → Regras** e use:
 {
   "rules": {
     "orlando": {
-      "c7e06f64b6": { ".read": true, ".write": true }
+      "c7e06f64b6": { ".read": true, ".write": true },
+      "app": { ".read": true, ".write": true }
     }
   }
 }
 ```
 
-O único dado que trafega é `{slide, ts, by}` — o número do card. Nada pessoal.
+**Importante:** a linha do `"app"` é obrigatória. É onde ficam o cronograma, os carros, os
+quartos e os restaurantes. Sem ela, nada do que a família marcar é salvo.
+
+Os dados que trafegam: o número do card da apresentação, quem marcou presença em cada dia,
+horário dos parques, ocupantes de carro e quarto, ideias e sugestões de restaurante.
 
 ---
 
@@ -147,12 +152,52 @@ mundo abrir no celular. O conteúdo completo continua na página normal, com scr
 Se a internet cair ou você pular a Parte 2, a apresentação continua funcionando em
 cada aparelho: setas do teclado, clique nas laterais da tela ou swipe.
 
+## Parte 4 — As telas do app
+
+O menu da esquerda (embaixo, no celular) tem cinco itens.
+
+**Cronograma** — os 15 dias. Cada um toca no próprio nome no dia que vai, e o contador mostra
+quantos marcaram. Nos dias de parque tem um campo de horário de abertura e fechamento, que
+qualquer um preenche. Nos dias livres, uma caixa de ideias.
+
+**Carros** — os 4 carros com ocupantes e lugares. A quantidade de lugares é editável, já que
+é chute até vocês verem os carros. O contador mostra quantos lugares sobram. O Carro 1 conta
+um lugar a mais, do bebê conforto do Guilherme.
+
+**Quartos** — os 7 quartos com cama, banheiro e ocupantes. Os quartos 4 e 5 aparecem com o
+aviso destacado de que dividem o mesmo banheiro Jack e Jill. Dá pra trocar gente de quarto.
+
+**Restaurantes** — lista aberta, qualquer um adiciona.
+
+**Reunião** — o manual e a apresentação. Escondida até 23/09/2026.
+
+### Quem é você
+
+Não tem login. Tem um seletor de nome no rodapé do menu, salvo no aparelho, que serve só pra
+assinar ideias e sugestões. Qualquer um pode marcar ou desmarcar qualquer pessoa — é família,
+e assim ninguém trava por não saber usar.
+
+### A trava da Reunião
+
+Até **23/09/2026** o item "Reunião" não aparece no menu. Você entra por
+`SEU-SITE/#reuniao`, que mostra a tela de senha. Os dois valores estão no `index.html`:
+
+```js
+var REUNIAO_SENHA = "casa2026";
+var REUNIAO_ABRE  = new Date(2026, 8, 23, 0, 0, 0);
+```
+
+Depois de 23/09 a aba aparece sozinha pra todo mundo, sem senha.
+
+**Isso é cortina, não fechadura.** Num site estático a senha está no código-fonte, que
+qualquer um abre. Serve contra curiosidade, não contra quem quiser de verdade.
+
 ## Estrutura
 
 ```
-index.html      a página inteira: conteúdo, estilo, apresentação e sincronização
+index.html      tudo: as cinco telas, o manual, a apresentação e a sincronização
 README.md       este arquivo
-img/            as fotos usadas nas capas de seção
+img/            as fotos usadas nas regras
 ```
 
 Arquivo único, sem build, sem dependências. As únicas coisas externas são as fontes
@@ -174,6 +219,11 @@ da página. Não existe uma segunda cópia do texto pra manter sincronizada.
 | Glossário | `<dl class="gloss">` |
 | Cores (claro e escuro) | bloco `:root` no `<style>` |
 | Velocidade da sincronização | `POLL_MS` no `<script>` |
+| Nomes dos viajantes | array `PESSOAS`, no segundo `<script>` |
+| Dias e parques | array `AGENDA` |
+| Carros e lugares iniciais | array `CARROS` |
+| Quartos, camas e banheiros | array `QUARTOS` |
+| Senha e data da Reunião | `REUNIAO_SENHA` e `REUNIAO_ABRE` |
 | Desenhos das seções sem foto | objeto `PICT` no `<script>` |
 
 ### Trocando ou acrescentando fotos
